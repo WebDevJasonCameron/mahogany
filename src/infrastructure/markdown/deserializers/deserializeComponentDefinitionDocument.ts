@@ -3,18 +3,10 @@ import { parse } from "yaml";
 import { ComponentDefinition } from "@/domain/components/models/ComponentDefinition";
 import { ComponentDefinitionDocument } from "@/domain/components/models/ComponentDefinitionDocument";
 import { validateComponentDefinition } from "@/domain/components/validations/validateComponentDefinition";
-
-interface ComponentDefinitionFrontmatter {
-    mahogany?: {
-        type?: string;
-        version?: number;
-    };
-
-    id?: string;
-    name?: string;
-    directory?: string;
-    fields?: ComponentDefinition["fields"];
-}
+import {
+    ComponentDefinitionFrontmatterSchema,
+    MahoganyMetadataSchema,
+} from "@/infrastructure/markdown/schemas/ComponentDefinitionFrontmatterSchema";
 
 const FRONTMATTER_PATTERN =
     /^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n)?([\s\S]*)$/;
@@ -33,26 +25,48 @@ export function deserializeComponentDefinitionDocument(
     const frontmatterText = match[1];
     const body = match[2];
 
-    const frontmatter =
-        parse(frontmatterText) as ComponentDefinitionFrontmatter;
+    const parsedYaml = parse(frontmatterText);
 
-    if (frontmatter.mahogany?.type !== "component-definition") {
+    const metadataResult =
+        MahoganyMetadataSchema.safeParse(parsedYaml);
+
+    if (!metadataResult.success) {
+        throw new Error(
+            "Cannot deserialize Component Definition: Invalid Mahogany metadata."
+        );
+    }
+
+    if (
+        metadataResult.data.mahogany.type !==
+        "component-definition"
+    ) {
         throw new Error(
             "Cannot deserialize Component Definition: Invalid Mahogany document type."
         );
     }
 
-    if (frontmatter.mahogany?.version !== 1) {
+    if (metadataResult.data.mahogany.version !== 1) {
         throw new Error(
-            `Cannot deserialize Component Definition: Unsupported version "${frontmatter.mahogany?.version}".`
+            `Cannot deserialize Component Definition: Unsupported version "${metadataResult.data.mahogany.version}".`
         );
     }
 
+    const schemaResult =
+        ComponentDefinitionFrontmatterSchema.safeParse(parsedYaml);
+
+    if (!schemaResult.success) {
+        throw new Error(
+            "Cannot deserialize Component Definition: Invalid frontmatter structure."
+        );
+    }
+
+    const frontmatter = schemaResult.data;
+
     const definition: ComponentDefinition = {
-        id: frontmatter.id ?? "",
-        name: frontmatter.name ?? "",
-        directory: frontmatter.directory ?? "",
-        fields: frontmatter.fields ?? [],
+        id: frontmatter.id,
+        name: frontmatter.name,
+        directory: frontmatter.directory,
+        fields: frontmatter.fields,
     };
 
     const validationResult =
