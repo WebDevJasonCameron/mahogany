@@ -35,6 +35,7 @@ describe("MahoganyPaths", () => {
                 workspaceRoot,
                 ".mahogany",
                 "definitions",
+                "characters", 
                 "character.md"
             )
         );

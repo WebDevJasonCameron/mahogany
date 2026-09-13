@@ -23,7 +23,8 @@ describe("loadComponentDefinitionDocument", () => {
             join(
                 workspaceRoot,
                 ".mahogany",
-                "definitions"
+                "definitions",
+                "characters"
             ),
             {
                 recursive: true,
@@ -74,7 +75,7 @@ fields:
         const document =
             await loadComponentDefinitionDocument(
                 workspaceRoot,
-                "character",
+                "characters",
                 "character"
             );
 
@@ -101,7 +102,7 @@ fields:
         await expect(
             loadComponentDefinitionDocument(
                 workspaceRoot,
-                "character",
+                "characters",
                 "missing"
             )
         ).rejects.toThrow();

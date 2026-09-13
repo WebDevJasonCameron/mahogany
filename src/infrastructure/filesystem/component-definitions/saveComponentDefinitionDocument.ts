@@ -1,19 +1,28 @@
 import { mkdir, writeFile } from "node:fs/promises";
 
 import { ComponentDefinitionDocument } from "@/domain/components/models/ComponentDefinitionDocument";
-import { getComponentDefinitionPath, getDefinitionsDirectory } from "@/infrastructure/filesystem/paths/MahoganyPaths";
+import {
+    getComponentDefinitionPath,
+    getDefinitionCategoryDirectory,
+} from "@/infrastructure/filesystem/paths/MahoganyPaths";
 import { serializeComponentDefinitionDocument } from "@/infrastructure/markdown/serializers/serializeComponentDefinitionDocument";
 
 export async function saveComponentDefinitionDocument(
     workspaceRoot: string,
     document: ComponentDefinitionDocument
 ): Promise<void> {
-    const definitionsDirectory =
-        getDefinitionsDirectory(workspaceRoot);
+    const categoryDirectory =
+        getDefinitionCategoryDirectory(
+            workspaceRoot,
+            document.definition.categoryId
+        );
 
-    await mkdir(definitionsDirectory, {
-        recursive: true,
-    });
+    await mkdir(
+        categoryDirectory,
+        {
+            recursive: true,
+        }
+    );
 
     const filePath =
         getComponentDefinitionPath(
@@ -23,7 +32,9 @@ export async function saveComponentDefinitionDocument(
         );
 
     const markdown =
-        serializeComponentDefinitionDocument(document);
+        serializeComponentDefinitionDocument(
+            document
+        );
 
     await writeFile(
         filePath,

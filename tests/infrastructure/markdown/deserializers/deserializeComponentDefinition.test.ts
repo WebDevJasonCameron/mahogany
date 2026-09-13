@@ -11,6 +11,7 @@ mahogany:
   version: 1
 id: character
 name: Character
+categoryId: characters
 directory: Characters
 fields:
   - key: name
@@ -35,6 +36,7 @@ fields:
         expect(document.definition).toEqual({
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "Characters",
             fields: [
                 {
@@ -74,6 +76,7 @@ mahogany:
   version: 1
 id: character
 name: Character
+categoryId: characters
 directory: Characters
 fields: []
 ---
@@ -93,6 +96,7 @@ mahogany:
   version: 1
 id: character
 name: Character
+categoryId: characters
 directory: Characters
 fields: []
 ---
@@ -112,6 +116,7 @@ mahogany:
   version: 99
 id: character
 name: Character
+categoryId: characters
 directory: Characters
 fields: []
 ---
@@ -131,6 +136,7 @@ mahogany:
   version: 1
 id: character
 name: ""
+categoryId: characters
 directory: Characters
 fields: []
 ---

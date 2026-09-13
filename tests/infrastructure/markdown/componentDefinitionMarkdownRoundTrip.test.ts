@@ -58,6 +58,7 @@ mahogany:
   version: 1
 id: character
 name: Character
+categoryId: characters
 directory: Characters
 fields: []
 ---

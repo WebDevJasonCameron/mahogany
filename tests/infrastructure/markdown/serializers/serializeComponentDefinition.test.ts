@@ -10,6 +10,7 @@ describe("serializeComponentDefinitionDocument", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "Characters",
             fields: [
                 {
@@ -44,6 +45,7 @@ mahogany:
   version: 1
 id: character
 name: Character
+categoryId: characters
 directory: Characters
 fields:
   - key: name
@@ -68,6 +70,7 @@ fields:
         const definition: ComponentDefinition = {
             id: "character",
             name: "",
+            categoryId: "characters",
             directory: "Characters",
             fields: [],
         };

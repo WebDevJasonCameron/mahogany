@@ -52,6 +52,7 @@ describe("saveComponentDefinitionDocument", () => {
             workspaceRoot,
             ".mahogany",
             "definitions",
+            "characters",
             "character.md"
         );
 
@@ -93,6 +94,7 @@ describe("saveComponentDefinitionDocument", () => {
             workspaceRoot,
             ".mahogany",
             "definitions",
+            "characters",
             "character.md"
         );
 
