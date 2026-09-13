@@ -1,14 +1,15 @@
 import { stringify } from "yaml";
 
-import { ComponentDefinition } from "@/domain/components/models/ComponentDefinition";
+import { ComponentDefinitionDocument } from "@/domain/components/models/ComponentDefinitionDocument";
 import { validateComponentDefinition } from "@/domain/components/validations/validateComponentDefinition";
 
 const COMPONENT_DEFINITION_VERSION = 1;
 
-export function serializeComponentDefinition(
-    definition: ComponentDefinition
+export function serializeComponentDefinitionDocument(
+    document: ComponentDefinitionDocument
 ): string {
-    const validationResult = validateComponentDefinition(definition);
+    const validationResult =
+        validateComponentDefinition(document.definition);
 
     if (!validationResult.valid) {
         throw new Error(
@@ -21,20 +22,20 @@ export function serializeComponentDefinition(
             type: "component-definition",
             version: COMPONENT_DEFINITION_VERSION,
         },
-        id: definition.id,
-        name: definition.name,
-        directory: definition.directory,
-        fields: definition.fields,
+        id: document.definition.id,
+        name: document.definition.name,
+        directory: document.definition.directory,
+        fields: document.definition.fields,
     };
 
-    const yaml = stringify(frontmatter);
+    const yaml = stringify(frontmatter).trimEnd();
+    const body = document.body.trimStart();
 
     return [
         "---",
-        yaml.trimEnd(),
+        yaml,
         "---",
         "",
-        `# ${definition.name}`,
-        "",
+        body,
     ].join("\n");
 }

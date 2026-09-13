@@ -1,11 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import { ComponentDefinition } from "@/domain/components/models/ComponentDefinition";
+import { ComponentDefinitionDocument } from "@/domain/components/models/ComponentDefinitionDocument";
 import { FieldType } from "@/domain/components/models/FieldType";
-import { serializeComponentDefinition } from "@/infrastructure/markdown/serializers/serializeComponentDefinition";
+import { serializeComponentDefinitionDocument } from "@/infrastructure/markdown/serializers/serializeComponentDefinitionDocument";
 
-describe("serializeComponentDefinition", () => {
-    test("serializes a Character Component Definition to Markdown", () => {
+describe("serializeComponentDefinitionDocument", () => {
+    test("serializes a Character Component Definition Document to Markdown", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
@@ -27,7 +28,14 @@ describe("serializeComponentDefinition", () => {
             ],
         };
 
-        const markdown = serializeComponentDefinition(definition);
+        const document: ComponentDefinitionDocument = {
+            definition,
+            body: `# Character
+`,
+        };
+
+        const markdown =
+            serializeComponentDefinitionDocument(document);
 
         expect(markdown).toBe(
             `---
@@ -64,8 +72,14 @@ fields:
             fields: [],
         };
 
+        const document: ComponentDefinitionDocument = {
+            definition,
+            body: `# Character
+`,
+        };
+
         expect(() => {
-            serializeComponentDefinition(definition);
+            serializeComponentDefinitionDocument(document);
         }).toThrow("Cannot serialize invalid Component Definition");
     });
 });
