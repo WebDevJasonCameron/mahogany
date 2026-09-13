@@ -3,18 +3,22 @@ import { FieldDefinition } from "@/domain/components/models/FieldDefinition";
 
 export function createComponentDefinition(
     name: string,
+    categoryId: string,
     directory: string,
     fields: FieldDefinition[] = []
 ): ComponentDefinition {
     return {
         id: createComponentId(name),
         name: name.trim(),
+        categoryId: categoryId.trim(),
         directory: directory.trim(),
         fields,
     };
 }
 
-function createComponentId(name: string): string {
+function createComponentId(
+    name: string
+): string {
     return name
         .trim()
         .toLowerCase()

@@ -10,6 +10,7 @@ describe("Component Definition Markdown round trip", () => {
     test("preserves the definition and Markdown body", () => {
         const definition = createComponentDefinition(
             "Character",
+            "characters",
             "Characters",
             [
                 {

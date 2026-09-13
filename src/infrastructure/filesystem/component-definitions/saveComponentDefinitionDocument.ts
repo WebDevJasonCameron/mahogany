@@ -18,6 +18,7 @@ export async function saveComponentDefinitionDocument(
     const filePath =
         getComponentDefinitionPath(
             workspaceRoot,
+            document.definition.categoryId,
             document.definition.id
         );
 

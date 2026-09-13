@@ -1,76 +1,108 @@
 import {
-    join,
     relative,
     resolve,
 } from "node:path";
 
-const COMPONENT_DEFINITION_ID_PATTERN =
+const SAFE_ID_PATTERN =
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function getDefinitionsDirectory(
     workspaceRoot: string
 ): string {
-    return join(
+    return resolve(
         workspaceRoot,
         ".mahogany",
         "definitions"
     );
 }
 
-export function getComponentDefinitionPath(
+export function getDefinitionCategoryDirectory(
     workspaceRoot: string,
-    componentDefinitionId: string
+    categoryId: string
 ): string {
-    assertValidComponentDefinitionId(
-        componentDefinitionId
+    assertSafeId(
+        categoryId,
+        "Component Definition category ID"
     );
 
     const definitionsDirectory =
-        resolve(
-            getDefinitionsDirectory(workspaceRoot)
+        getDefinitionsDirectory(
+            workspaceRoot
         );
 
-    const filePath =
+    const categoryDirectory =
         resolve(
             definitionsDirectory,
-            `${componentDefinitionId}.md`
+            categoryId
         );
 
     assertPathInsideDirectory(
         definitionsDirectory,
+        categoryDirectory
+    );
+
+    return categoryDirectory;
+}
+
+export function getComponentDefinitionPath(
+    workspaceRoot: string,
+    categoryId: string,
+    componentDefinitionId: string
+): string {
+    assertSafeId(
+        componentDefinitionId,
+        "Component Definition ID"
+    );
+
+    const categoryDirectory =
+        getDefinitionCategoryDirectory(
+            workspaceRoot,
+            categoryId
+        );
+
+    const filePath =
+        resolve(
+            categoryDirectory,
+            `${componentDefinitionId}.md`
+        );
+
+    assertPathInsideDirectory(
+        categoryDirectory,
         filePath
     );
 
     return filePath;
 }
 
-function assertValidComponentDefinitionId(
-    componentDefinitionId: string
+function assertSafeId(
+    value: string,
+    label: string
 ): void {
     if (
-        !COMPONENT_DEFINITION_ID_PATTERN.test(
-            componentDefinitionId
-        )
+        !SAFE_ID_PATTERN.test(value)
     ) {
         throw new Error(
-            `Invalid Component Definition ID "${componentDefinitionId}".`
+            `Invalid ${label} "${value}".`
         );
     }
 }
 
 function assertPathInsideDirectory(
     directory: string,
-    filePath: string
+    targetPath: string
 ): void {
     const relativePath =
-        relative(directory, filePath);
+        relative(
+            directory,
+            targetPath
+        );
 
     if (
         relativePath.startsWith("..") ||
         relativePath === ""
     ) {
         throw new Error(
-            "Component Definition path must remain inside the definitions directory."
+            "Filesystem path must remain inside its expected directory."
         );
     }
 }

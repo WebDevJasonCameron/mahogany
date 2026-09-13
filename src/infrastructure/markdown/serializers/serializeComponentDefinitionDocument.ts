@@ -24,6 +24,7 @@ export function serializeComponentDefinitionDocument(
         },
         id: document.definition.id,
         name: document.definition.name,
+        categoryId: document.definition.categoryId,
         directory: document.definition.directory,
         fields: document.definition.fields,
     };

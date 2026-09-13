@@ -45,6 +45,7 @@ mahogany:
   version: 1
 id: character
 name: Character
+categoryId: characters
 directory: Characters
 fields:
   - key: name
@@ -60,6 +61,7 @@ fields:
             workspaceRoot,
             ".mahogany",
             "definitions",
+            "characters",
             "character.md"
         );
 
@@ -72,12 +74,14 @@ fields:
         const document =
             await loadComponentDefinitionDocument(
                 workspaceRoot,
+                "character",
                 "character"
             );
 
         expect(document.definition).toEqual({
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "Characters",
             fields: [
                 {
@@ -97,6 +101,7 @@ fields:
         await expect(
             loadComponentDefinitionDocument(
                 workspaceRoot,
+                "character",
                 "missing"
             )
         ).rejects.toThrow();

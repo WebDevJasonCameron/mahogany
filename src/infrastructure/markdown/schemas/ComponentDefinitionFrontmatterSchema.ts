@@ -25,6 +25,7 @@ export const ComponentDefinitionFrontmatterSchema = z.object({
 
     id: z.string(),
     name: z.string(),
+    categoryId: z.string(),
     directory: z.string(),
     fields: z.array(FieldDefinitionSchema),
 });

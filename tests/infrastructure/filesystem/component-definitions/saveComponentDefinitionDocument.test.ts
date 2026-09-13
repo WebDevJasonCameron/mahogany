@@ -28,6 +28,7 @@ describe("saveComponentDefinitionDocument", () => {
             definition: {
                 id: "character",
                 name: "Character",
+                categoryId: "characters",
                 directory: "Characters",
                 fields: [
                     {
@@ -75,6 +76,7 @@ describe("saveComponentDefinitionDocument", () => {
             definition: {
                 id: "character",
                 name: "Character",
+                categoryId: "characters",
                 directory: "Characters",
                 fields: [],
             },

@@ -6,18 +6,21 @@ import { deserializeComponentDefinitionDocument } from "@/infrastructure/markdow
 
 export async function loadComponentDefinitionDocument(
     workspaceRoot: string,
+    categoryId: string,
     componentDefinitionId: string
 ): Promise<ComponentDefinitionDocument> {
     const filePath =
         getComponentDefinitionPath(
             workspaceRoot,
+            categoryId,
             componentDefinitionId
         );
 
-    const markdown = await readFile(
-        filePath,
-        "utf8"
-    );
+    const markdown =
+        await readFile(
+            filePath,
+            "utf8"
+        );
 
     return deserializeComponentDefinitionDocument(
         markdown

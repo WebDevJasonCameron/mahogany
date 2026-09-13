@@ -10,6 +10,7 @@ describe("ComponentDefinition", () => {
         const characterDefinition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "Characters",
             fields: [
                 {
@@ -44,6 +45,7 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "   ",
+            categoryId: "characters",
             directory: "Characters",
             fields: [],
         };
@@ -58,6 +60,7 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "Characters",
             fields: [
                 {
@@ -85,6 +88,7 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "Characters",
             fields: [
                 {
@@ -108,6 +112,7 @@ describe("ComponentDefinition", () => {
     test("creates an id from the component name", () => {
         const definition = createComponentDefinition(
             "Character",
+            "characters",
             "Characters"
         );
 
@@ -117,6 +122,7 @@ describe("ComponentDefinition", () => {
     test("creates a kebab-case id from a multi-word component name", () => {
         const definition = createComponentDefinition(
             "Magic Item",
+            "items",
             "Items"
         );
 
@@ -126,6 +132,7 @@ describe("ComponentDefinition", () => {
     test("trims component name and directory", () => {
         const definition = createComponentDefinition(
             "  Character  ",
+            "characters",
             "  Characters  "
         );
 
@@ -137,6 +144,7 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "../../Characters",
             fields: [],
         };
@@ -153,6 +161,7 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            categoryId: "characters",
             directory: "Components/Characters",
             fields: [],
         };
@@ -166,6 +175,7 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "magic-item",
             name: "Magic Item",
+            categoryId: "items",
             directory: "Magic Items",
             fields: [],
         };

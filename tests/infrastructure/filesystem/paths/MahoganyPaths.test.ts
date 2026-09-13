@@ -27,6 +27,7 @@ describe("MahoganyPaths", () => {
         expect(
             getComponentDefinitionPath(
                 workspaceRoot,
+                "characters",
                 "character"
             )
         ).toBe(
@@ -43,6 +44,7 @@ describe("MahoganyPaths", () => {
         expect(() => {
             getComponentDefinitionPath(
                 "/test/workspace",
+                "characters",
                 "../../secret"
             );
         }).toThrow(
@@ -54,6 +56,7 @@ describe("MahoganyPaths", () => {
         expect(() => {
             getComponentDefinitionPath(
                 "/test/workspace",
+                "characters",
                 "characters/secret"
             );
         }).toThrow(
@@ -65,6 +68,7 @@ describe("MahoganyPaths", () => {
         expect(() => {
             getComponentDefinitionPath(
                 "/test/workspace",
+                "characters",
                 "characters\\secret"
             );
         }).toThrow(
@@ -76,6 +80,7 @@ describe("MahoganyPaths", () => {
         expect(() => {
             getComponentDefinitionPath(
                 "/test/workspace",
+                "characters",
                 ""
             );
         }).toThrow(

@@ -7,6 +7,7 @@ export interface ValidationResult {
 }
 
 const DIRECTORY_PATTERN = /^[A-Za-z0-9 _-]+$/;
+const CATEGORY_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function validateComponentDefinition(
     definition: ComponentDefinition
@@ -28,6 +29,20 @@ export function validateComponentDefinition(
 
     if (!definition.directory.trim()) {
         errors.push("Component directory is required.");
+    }
+
+    if (!definition.categoryId.trim()) {
+        errors.push(
+            "Component Definition category ID cannot be blank."
+        );
+    } else if (
+        !CATEGORY_ID_PATTERN.test(
+            definition.categoryId
+        )
+    ) {
+        errors.push(
+            "Component Definition category ID is invalid."
+        );
     }
 
     const seenKeys = new Set<string>();

@@ -29,6 +29,7 @@ describe("Component Definition filesystem round trip", () => {
             definition: {
                 id: "character",
                 name: "Character",
+                categoryId: "characters",
                 directory: "Characters",
                 fields: [
                     {
@@ -64,6 +65,7 @@ This text should survive being written to disk and loaded again.
         const restored =
             await loadComponentDefinitionDocument(
                 workspaceRoot,
+                "characters",
                 original.definition.id
             );
 
