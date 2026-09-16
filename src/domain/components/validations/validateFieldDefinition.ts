@@ -1,3 +1,37 @@
+/**
+ * validateFieldDefinition
+ *
+ * Validates a single FieldDefinition against Mahogany's field-level
+ * domain rules and returns all validation errors found.
+ *
+ * Field validation currently ensures that:
+ *
+ * - `key` is not blank.
+ * - `key` begins with a letter and contains only letters and numbers.
+ * - `label` is not blank.
+ * - Enum fields contain at least one option.
+ * - Enum options do not contain blank values.
+ * - Enum options do not contain duplicate values.
+ * - Non-Enum fields do not contain options.
+ *
+ * Enum options are trimmed when checking for blank or duplicate values.
+ * This ensures values that differ only by surrounding whitespace are
+ * treated as equivalent during validation. This check does not modify
+ * the original options; actual cleanup of field data belongs to the
+ * normalization layer.
+ *
+ * This validator is responsible only for rules belonging to an individual
+ * FieldDefinition. Component-level concerns, such as duplicate field keys
+ * within the same Component Definition, are handled by
+ * `validateComponentDefinition`.
+ *
+ * Validation is non-mutating and collects all discovered errors rather
+ * than stopping at the first failure.
+ *
+ * `FieldValidationResult.valid` is true only when no validation errors
+ * were discovered.
+ */
+
 import { FieldDefinition } from "@/domain/components/models/FieldDefinition";
 import { FieldType } from "@/domain/components/models/FieldType";
 

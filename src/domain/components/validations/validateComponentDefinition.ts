@@ -1,3 +1,36 @@
+/**
+ * validateComponentDefinition
+ *
+ * Validates a ComponentDefinition against Mahogany's domain rules and
+ * returns all validation errors found in the definition.
+ *
+ * Component-level validation currently ensures that:
+ *
+ * - `name` is not blank.
+ * - `directory` is not blank.
+ * - `directory` contains only filesystem-safe characters currently
+ *   supported by Mahogany.
+ * - `categoryId` is not blank and follows Mahogany's category ID format.
+ * - Field keys are unique within the Component Definition.
+ * - Every FieldDefinition satisfies its own validation rules.
+ *
+ * Category IDs use lowercase alphanumeric words separated by hyphens.
+ * This validates the structure of a category ID, but does not determine
+ * whether that ID exists in the Component Definition Category Registry.
+ * Registry membership is a separate concern.
+ *
+ * Field-specific validation is delegated to `validateFieldDefinition`
+ * rather than duplicated here. Any errors returned by the field validator
+ * are collected with the Component Definition's other validation errors.
+ *
+ * Validation is non-mutating and collects all discovered errors rather
+ * than stopping at the first failure. Callers can therefore present the
+ * user with the complete set of problems that must be corrected.
+ *
+ * `ValidationResult.valid` is true only when no validation errors were
+ * discovered.
+ */
+
 import { ComponentDefinition } from "@/domain/components/models/ComponentDefinition";
 import { validateFieldDefinition } from "@/domain/components/validations/validateFieldDefinition";
 

@@ -6,7 +6,7 @@ describe("ComponentDefinitionCategoryRegistry", () => {
         const categories =
             ComponentDefinitionCategoryRegistry.getAll();
 
-        expect(categories).toHaveLength(4);
+        expect(categories).toHaveLength(5);
     });
 
     it("returns a category by id", () => {
