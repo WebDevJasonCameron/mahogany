@@ -12,6 +12,8 @@ describe("Component Definition Markdown round trip", () => {
             "Character",
             "characters",
             "Characters",
+            false,
+            "",
             [
                 {
                     key: "name",
@@ -60,6 +62,8 @@ id: character
 name: Character
 categoryId: characters
 directory: Characters
+copy: false
+copyOf: ""
 fields: []
 ---
 

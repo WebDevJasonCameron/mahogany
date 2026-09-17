@@ -12,6 +12,8 @@ describe("ComponentDefinition", () => {
             name: "Character",
             categoryId: "characters",
             directory: "Characters",
+            copy: false,
+            copyOf: "",
             fields: [
                 {
                     key: "name",
@@ -47,6 +49,8 @@ describe("ComponentDefinition", () => {
             name: "   ",
             categoryId: "characters",
             directory: "Characters",
+            copy: false,
+            copyOf: "",
             fields: [],
         };
 
@@ -62,6 +66,8 @@ describe("ComponentDefinition", () => {
             name: "Character",
             categoryId: "characters",
             directory: "Characters",
+            copy: false,
+            copyOf: "",
             fields: [
                 {
                     key: "name",
@@ -90,6 +96,8 @@ describe("ComponentDefinition", () => {
             name: "Character",
             categoryId: "characters",
             directory: "Characters",
+            copy: false,
+            copyOf: "",
             fields: [
                 {
                     key: "characterType",
@@ -113,7 +121,9 @@ describe("ComponentDefinition", () => {
         const definition = createComponentDefinition(
             "Character",
             "characters",
-            "Characters"
+            "Characters",
+            false,
+            ""
         );
 
         expect(definition.id).toBe("character");
@@ -123,7 +133,9 @@ describe("ComponentDefinition", () => {
         const definition = createComponentDefinition(
             "Magic Item",
             "items",
-            "Items"
+            "Items",
+            false,
+            ""
         );
 
         expect(definition.id).toBe("magic-item");
@@ -133,7 +145,9 @@ describe("ComponentDefinition", () => {
         const definition = createComponentDefinition(
             "  Character  ",
             "characters",
-            "  Characters  "
+            "  Characters  ",
+            false,
+            ""
         );
 
         expect(definition.name).toBe("Character");
@@ -146,6 +160,8 @@ describe("ComponentDefinition", () => {
             name: "Character",
             categoryId: "characters",
             directory: "../../Characters",
+            copy: false,
+            copyOf: "",
             fields: [],
         };
 
@@ -163,6 +179,8 @@ describe("ComponentDefinition", () => {
             name: "Character",
             categoryId: "characters",
             directory: "Components/Characters",
+            copy: false,
+            copyOf: "",
             fields: [],
         };
 
@@ -177,6 +195,8 @@ describe("ComponentDefinition", () => {
             name: "Magic Item",
             categoryId: "items",
             directory: "Magic Items",
+            copy: false,
+            copyOf: "",
             fields: [],
         };
 

@@ -48,6 +48,8 @@ id: character
 name: Character
 categoryId: characters
 directory: Characters
+copy: false
+copyOf: ""
 fields:
   - key: name
     label: Name
@@ -84,6 +86,8 @@ fields:
             name: "Character",
             categoryId: "characters",
             directory: "Characters",
+            copy: false,
+            copyOf: "",
             fields: [
                 {
                     key: "name",

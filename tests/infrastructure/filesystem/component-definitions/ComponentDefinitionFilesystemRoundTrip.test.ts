@@ -31,6 +31,8 @@ describe("Component Definition filesystem round trip", () => {
                 name: "Character",
                 categoryId: "characters",
                 directory: "Characters",
+                copy: false,
+                copyOf: "",
                 fields: [
                     {
                         key: "name",

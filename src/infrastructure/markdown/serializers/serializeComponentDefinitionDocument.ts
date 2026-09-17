@@ -61,6 +61,8 @@ export function serializeComponentDefinitionDocument(
         name: document.definition.name,
         categoryId: document.definition.categoryId,
         directory: document.definition.directory,
+        copy: document.definition.copy,
+        copyOf: document.definition.copyOf,
         fields: document.definition.fields,
     };
 
