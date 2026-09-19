@@ -41,6 +41,7 @@
 import { z } from "zod";
 
 import { FieldType } from "@/domain/components/models/FieldType";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 export const MahoganyMetadataSchema = z.object({
     mahogany: z.object({
@@ -65,9 +66,9 @@ export const ComponentDefinitionFrontmatterSchema = z.object({
 
     id: z.string(),
     name: z.string(),
+    state: z.enum(ComponentState),
+    stateId: z.string(),
     categoryId: z.string(),
-    directory: z.string(),
-    copy: z.boolean(),
     copyOf: z.string(),
     fields: z.array(FieldDefinitionSchema),
 });

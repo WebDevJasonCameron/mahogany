@@ -25,13 +25,14 @@
  */
 
 import { FieldDefinition } from "@/domain/components/models/FieldDefinition";
+import { ComponentState } from "@/domain/components/models/ComponentState";
 
 export interface ComponentDefinition {
     id: string;
     name: string;
+    state: ComponentState;
+    stateId: string;
     categoryId: string;
-    directory: string;
-    copy: boolean;
     copyOf: string;
     fields: FieldDefinition[];
 }

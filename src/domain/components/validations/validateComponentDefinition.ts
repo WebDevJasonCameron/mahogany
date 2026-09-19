@@ -52,16 +52,16 @@ export function validateComponentDefinition(
     }
 
     if (
-        definition.directory.trim() &&
-        !DIRECTORY_PATTERN.test(definition.directory)
+        definition.stateId.trim() &&
+        !DIRECTORY_PATTERN.test(definition.stateId)
     ) {
         errors.push(
-            `Component directory "${definition.directory}" contains invalid characters.`
+            `Component state ID "${definition.state}" contains invalid characters.`
         );
     }
 
-    if (!definition.directory.trim()) {
-        errors.push("Component directory is required.");
+    if (!definition.stateId.trim()) {
+        errors.push("Component Definition state ID cannot be blank.");
     }
 
     if (!definition.categoryId.trim()) {

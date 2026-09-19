@@ -106,9 +106,9 @@ export function deserializeComponentDefinitionDocument(
     const definition: ComponentDefinition = {
         id: frontmatter.id,
         name: frontmatter.name,
+        state: frontmatter.state,
+        stateId: frontmatter.stateId,
         categoryId: frontmatter.categoryId,
-        directory: frontmatter.directory,
-        copy: frontmatter.copy,
         copyOf: frontmatter.copyOf,
         fields: frontmatter.fields,
     };

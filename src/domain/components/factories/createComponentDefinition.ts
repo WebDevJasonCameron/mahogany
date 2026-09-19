@@ -41,21 +41,22 @@
 
 import { ComponentDefinition } from "@/domain/components/models/ComponentDefinition";
 import { FieldDefinition } from "@/domain/components/models/FieldDefinition";
+import { ComponentState } from "@/domain/components/models/ComponentState";
 
 export function createComponentDefinition(
     name: string,
+    state: ComponentState,
+    stateId: string,
     categoryId: string,
-    directory: string,
-    copy: boolean,
     copyOf: string,
     fields: FieldDefinition[] = []
 ): ComponentDefinition {
     return {
         id: createComponentId(name),
         name: name.trim(),
+        state: state,
+        stateId: stateId.trim(),
         categoryId: categoryId.trim(),
-        directory: directory.trim(),
-        copy: copy,
         copyOf: copyOf.trim(),
         fields,
     };
