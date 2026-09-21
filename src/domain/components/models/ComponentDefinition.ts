@@ -1,27 +1,44 @@
 /**
  * ComponentDefinition
  *
- * Defines the schema for a type of Component within Mahogany.
+ * Defines the domain structure used to describe a Component within Mahogany.
  *
- * A Component Definition describes what Components of a particular type
- * look like, including the fields they contain and where their Markdown
- * files are stored. For example, a "Character" definition may describe
- * fields such as name, species, profession, or other character attributes.
+ * A Component Definition contains the identity, organizational context,
+ * lineage, and field schema needed to represent a Component as portable,
+ * self-describing data.
  *
- * Component Definitions are grouped by category using `categoryId`.
- * The category itself is defined separately by ComponentDefinitionCategory.
+ * `id` is the stable, unique identity of this specific definition. It is
+ * intended to remain unchanged when the definition is renamed, moved, or
+ * edited.
  *
- * `directory` identifies where Component instances created from this
- * definition are stored within the user's Mahogany workspace.
+ * `name` is the human-readable name of the definition and may also be used
+ * when determining its Markdown filename. It is not the definition's
+ * persistent identity.
  *
- * `copy` and `copyOf` track whether this definition was created as a copy
- * of another Component Definition, allowing definitions to be duplicated
- * and modified without changing the original.
+ * `state` identifies the lifecycle context in which the definition exists.
+ * Mahogany currently supports library, package, and inPlay states.
+ *
+ * `stateId` identifies the specific context within that state. For example,
+ * a package may use a stateId identifying a particular campaign, while an
+ * inPlay definition may use a stateId identifying a particular run of that
+ * campaign.
+ *
+ * `categoryId` identifies the Component category to which the definition
+ * belongs. Category metadata, including its filesystem directory name, is
+ * defined separately by ComponentDefinitionCategory and its registry.
+ *
+ * `copyOf` records the stable ID of the immediate definition from which this
+ * definition was copied. An empty value indicates that the definition has
+ * no parent in its lineage. This allows copied definitions to evolve
+ * independently while preserving their provenance.
+ *
+ * `fields` describes the fields available to the Component, including their
+ * keys, labels, types, requirements, and other field-specific configuration.
  *
  * This interface represents domain data only. It does not perform
  * validation, normalization, filesystem access, or serialization.
- * Those responsibilities belong to their respective domain/application
- * layers.
+ * Those responsibilities belong to their respective domain and
+ * infrastructure layers.
  */
 
 import { FieldDefinition } from "@/domain/components/models/FieldDefinition";

@@ -10,28 +10,39 @@
  *
  * When creating a definition, this factory:
  *
- * - Generates the definition's stable `id` from its name.
+ * - Generates the definition's current `id` from its name.
  * - Trims surrounding whitespace from `name`.
+ * - Stores the supplied Component lifecycle `state`.
+ * - Trims surrounding whitespace from `stateId`.
  * - Trims surrounding whitespace from `categoryId`.
- * - Trims surrounding whitespace from `directory`.
- * - Records whether the definition is a copy of another definition.
- * - Trims and stores the source definition identifier in `copyOf`.
+ * - Trims and stores the immediate parent definition identifier in `copyOf`.
  * - Accepts an optional collection of FieldDefinitions, defaulting to an
  *   empty collection when no fields are supplied.
  *
- * `copy` indicates whether this Component Definition was created as a copy
- * of another definition. When it is a copy, `copyOf` identifies the original
- * definition from which it was created. This allows a copied definition to
- * evolve independently while retaining information about its origin.
+ * `state` identifies the lifecycle context in which the definition exists,
+ * such as library, package, or inPlay.
  *
- * `createComponentId()` converts the human-readable definition name into
- * Mahogany's stable ID format. The generated ID is lowercase, replaces
- * groups of non-alphanumeric characters with hyphens, and removes leading
- * or trailing hyphens.
+ * `stateId` identifies the specific context within that state. This allows
+ * multiple packages or inPlay runs to exist independently while sharing the
+ * same lifecycle state.
+ *
+ * `copyOf` records the ID of the immediate Component Definition from which
+ * this definition was copied. An empty value indicates that the definition
+ * has no parent in its lineage.
+ *
+ * `createComponentId()` currently derives an ID from the human-readable
+ * definition name by converting it to lowercase, replacing groups of
+ * non-alphanumeric characters with hyphens, and removing leading or
+ * trailing hyphens.
  *
  * For example:
  *
  *     " Player Character " -> "player-character"
+ *
+ * Name-derived IDs are temporary behavior. Mahogany's domain model requires
+ * `id` to become an immutable unique identifier that remains stable across
+ * renames, edits, moves, and changes of state. ID generation will therefore
+ * be replaced separately without changing the other factory semantics.
  *
  * This factory performs object construction and basic normalization only.
  * It does not determine whether the resulting ComponentDefinition is valid.

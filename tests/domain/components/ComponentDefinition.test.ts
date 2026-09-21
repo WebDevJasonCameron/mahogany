@@ -155,7 +155,7 @@ describe("ComponentDefinition", () => {
         expect(definition.categoryId).toBe("characters");
     });
 
-    test("accepts a safe component directory name", () => {
+    test("accepts a safe component definition", () => {
         const definition: ComponentDefinition = {
             id: "magic-item",
             name: "Magic Item",
