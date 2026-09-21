@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { FieldType } from "@/domain/components/models/FieldType";
 import { deserializeComponentDefinitionDocument } from "@/infrastructure/markdown/deserializers/deserializeComponentDefinitionDocument";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 describe("deserializeComponentDefinition", () => {
     test("deserializes Markdown into a Component Definition", () => {
@@ -11,9 +12,9 @@ mahogany:
   version: 1
 id: character
 name: Character
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
-copy: false
 copyOf: ""
 fields:
   - key: name
@@ -38,9 +39,9 @@ fields:
         expect(document.definition).toEqual({
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
-            copy: false,
             copyOf: "",
             fields: [
                 {
@@ -80,9 +81,9 @@ mahogany:
   version: 1
 id: character
 name: Character
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
-copy: false
 copyOf: ""
 fields: []
 ---
@@ -102,9 +103,9 @@ mahogany:
   version: 1
 id: character
 name: Character
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
-copy: false
 copyOf: ""
 fields: []
 ---
@@ -124,9 +125,9 @@ mahogany:
   version: 99
 id: character
 name: Character
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
-copy: false
 copyOf: ""
 fields: []
 ---
@@ -146,9 +147,9 @@ mahogany:
   version: 1
 id: character
 name: ""
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
-copy: false
 copyOf: ""
 fields: []
 ---

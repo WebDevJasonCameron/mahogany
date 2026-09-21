@@ -10,6 +10,7 @@ import { join } from "node:path";
 
 import { FieldType } from "@/domain/components/models/FieldType";
 import { loadComponentDefinitionDocument } from "@/infrastructure/filesystem/component-definitions/loadComponentDefinitionDocument";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 describe("loadComponentDefinitionDocument", () => {
     let workspaceRoot: string;
@@ -46,9 +47,9 @@ mahogany:
   version: 1
 id: character
 name: Character
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
-copy: false
 copyOf: ""
 fields:
   - key: name
@@ -84,9 +85,9 @@ fields:
         expect(document.definition).toEqual({
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
-            copy: false,
             copyOf: "",
             fields: [
                 {

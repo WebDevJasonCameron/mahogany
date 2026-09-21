@@ -5,14 +5,15 @@ import { ComponentDefinitionDocument } from "@/domain/components/models/Componen
 import { FieldType } from "@/domain/components/models/FieldType";
 import { deserializeComponentDefinitionDocument } from "@/infrastructure/markdown/deserializers/deserializeComponentDefinitionDocument";
 import { serializeComponentDefinitionDocument } from "@/infrastructure/markdown/serializers/serializeComponentDefinitionDocument";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 describe("Component Definition Markdown round trip", () => {
     test("preserves the definition and Markdown body", () => {
         const definition = createComponentDefinition(
             "Character",
+            ComponentState.Library,
+            "core",
             "characters",
-            "Characters",
-            false,
             "",
             [
                 {
@@ -60,9 +61,9 @@ mahogany:
   version: 1
 id: character
 name: Character
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
-copy: false
 copyOf: ""
 fields: []
 ---

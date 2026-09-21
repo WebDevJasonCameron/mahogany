@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { ComponentDefinitionDocument } from "@/domain/components/models/ComponentDefinitionDocument";
 import { FieldType } from "@/domain/components/models/FieldType";
 import { saveComponentDefinitionDocument } from "@/infrastructure/filesystem/component-definitions/saveComponentDefinitionDocument";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 describe("saveComponentDefinitionDocument", () => {
     let workspaceRoot: string;
@@ -28,8 +29,10 @@ describe("saveComponentDefinitionDocument", () => {
             definition: {
                 id: "character",
                 name: "Character",
+                state: ComponentState.Library,
+                stateId: "core",
                 categoryId: "characters",
-                directory: "Characters",
+                copyOf: "",
                 fields: [
                     {
                         key: "name",
@@ -77,8 +80,10 @@ describe("saveComponentDefinitionDocument", () => {
             definition: {
                 id: "character",
                 name: "Character",
+                state: ComponentState.Library,
+                stateId: "core",
                 categoryId: "characters",
-                directory: "Characters",
+                copyOf: "",
                 fields: [],
             },
             body: `# Character

@@ -4,14 +4,17 @@ import { ComponentDefinition } from "@/domain/components/models/ComponentDefinit
 import { ComponentDefinitionDocument } from "@/domain/components/models/ComponentDefinitionDocument";
 import { FieldType } from "@/domain/components/models/FieldType";
 import { serializeComponentDefinitionDocument } from "@/infrastructure/markdown/serializers/serializeComponentDefinitionDocument";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 describe("serializeComponentDefinitionDocument", () => {
     test("serializes a Character Component Definition Document to Markdown", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
+            copyOf: "",
             fields: [
                 {
                     key: "name",
@@ -45,8 +48,10 @@ mahogany:
   version: 1
 id: character
 name: Character
+state: library
+stateId: core
 categoryId: characters
-directory: Characters
+copyOf: ""
 fields:
   - key: name
     label: Name
@@ -70,8 +75,10 @@ fields:
         const definition: ComponentDefinition = {
             id: "character",
             name: "",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
+            copyOf: "",
             fields: [],
         };
 

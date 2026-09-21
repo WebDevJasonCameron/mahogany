@@ -7,6 +7,7 @@ import { ComponentDefinitionDocument } from "@/domain/components/models/Componen
 import { FieldType } from "@/domain/components/models/FieldType";
 import { loadComponentDefinitionDocument } from "@/infrastructure/filesystem/component-definitions/loadComponentDefinitionDocument";
 import { saveComponentDefinitionDocument } from "@/infrastructure/filesystem/component-definitions/saveComponentDefinitionDocument";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 describe("Component Definition filesystem round trip", () => {
     let workspaceRoot: string;
@@ -29,9 +30,9 @@ describe("Component Definition filesystem round trip", () => {
             definition: {
                 id: "character",
                 name: "Character",
+                state: ComponentState.Library,
+                stateId: "core",
                 categoryId: "characters",
-                directory: "Characters",
-                copy: false,
                 copyOf: "",
                 fields: [
                     {

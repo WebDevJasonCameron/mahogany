@@ -142,52 +142,17 @@ describe("ComponentDefinition", () => {
         expect(definition.id).toBe("magic-item");
     });
 
-    test("trims component name and directory", () => {
+    test("trims component name and category ID", () => {
         const definition = createComponentDefinition(
             "  Character  ",
             ComponentState.Library,
             "core",
-            "  Characters  ",
+            "  characters  ",
             ""
         );
 
         expect(definition.name).toBe("Character");
-        expect(definition.state).toBe( ComponentState.Library);
-    });
-    
-    test("rejects a component directory containing path traversal", () => {
-        const definition: ComponentDefinition = {
-            id: "character",
-            name: "Character",
-            state: ComponentState.Library,
-            stateId: "core",
-            categoryId: "characters",
-            copyOf: "",
-            fields: [],
-        };
-
-        const result = validateComponentDefinition(definition);
-
-        expect(result.valid).toBe(false);
-        expect(result.errors).toContain(
-            'Component directory "../../Characters" contains invalid characters.'
-        );
-    });
-
-    test("rejects a component directory containing path separators", () => {
-        const definition: ComponentDefinition = {
-            id: "character",
-            name: "Character",
-            state: ComponentState.Library,
-            stateId: "core",
-            categoryId: "characters",
-            copyOf: "",
-            fields: [],
-        };
-
-        const result = validateComponentDefinition(definition);
-
-        expect(result.valid).toBe(false);
+        expect(definition.categoryId).toBe("characters");
     });
 
     test("accepts a safe component directory name", () => {
