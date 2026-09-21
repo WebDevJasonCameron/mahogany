@@ -4,15 +4,16 @@ import { ComponentDefinition } from "@/domain/components/models/ComponentDefinit
 import { FieldType } from "@/domain/components/models/FieldType";
 import { validateComponentDefinition } from "@/domain/components/validations/validateComponentDefinition";
 import { createComponentDefinition } from "@/domain/components/factories/createComponentDefinition";
+import {ComponentState} from "@/domain/components/models/ComponentState";
 
 describe("ComponentDefinition", () => {
     test("accepts a valid Character component definition", () => {
         const characterDefinition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
-            copy: false,
             copyOf: "",
             fields: [
                 {
@@ -47,9 +48,9 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "   ",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
-            copy: false,
             copyOf: "",
             fields: [],
         };
@@ -64,9 +65,9 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
-            copy: false,
             copyOf: "",
             fields: [
                 {
@@ -94,9 +95,9 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Characters",
-            copy: false,
             copyOf: "",
             fields: [
                 {
@@ -120,9 +121,9 @@ describe("ComponentDefinition", () => {
     test("creates an id from the component name", () => {
         const definition = createComponentDefinition(
             "Character",
-            "characters",
+            ComponentState.Library,
+            "core",
             "Characters",
-            false,
             ""
         );
 
@@ -132,9 +133,9 @@ describe("ComponentDefinition", () => {
     test("creates a kebab-case id from a multi-word component name", () => {
         const definition = createComponentDefinition(
             "Magic Item",
-            "items",
+            ComponentState.Library,
+            "core",
             "Items",
-            false,
             ""
         );
 
@@ -144,23 +145,23 @@ describe("ComponentDefinition", () => {
     test("trims component name and directory", () => {
         const definition = createComponentDefinition(
             "  Character  ",
-            "characters",
+            ComponentState.Library,
+            "core",
             "  Characters  ",
-            false,
             ""
         );
 
         expect(definition.name).toBe("Character");
-        expect(definition.directory).toBe("Characters");
+        expect(definition.state).toBe( ComponentState.Library);
     });
     
     test("rejects a component directory containing path traversal", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "../../Characters",
-            copy: false,
             copyOf: "",
             fields: [],
         };
@@ -177,9 +178,9 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "character",
             name: "Character",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "characters",
-            directory: "Components/Characters",
-            copy: false,
             copyOf: "",
             fields: [],
         };
@@ -193,9 +194,9 @@ describe("ComponentDefinition", () => {
         const definition: ComponentDefinition = {
             id: "magic-item",
             name: "Magic Item",
+            state: ComponentState.Library,
+            stateId: "core",
             categoryId: "items",
-            directory: "Magic Items",
-            copy: false,
             copyOf: "",
             fields: [],
         };
