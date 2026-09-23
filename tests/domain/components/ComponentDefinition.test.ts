@@ -118,28 +118,60 @@ describe("ComponentDefinition", () => {
         );
     });
 
-    test("creates an id from the component name", () => {
+    test("creates a generated UUID id independent of the component name", () => {
         const definition = createComponentDefinition(
             "Character",
             ComponentState.Library,
             "core",
-            "Characters",
+            "characters",
             ""
         );
 
-        expect(definition.id).toBe("character");
+        expect(definition.id).toMatch(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+        );
+
+        expect(definition.id).not.toBe("character");
     });
 
-    test("creates a kebab-case id from a multi-word component name", () => {
-        const definition = createComponentDefinition(
+    test("creates distinct ids for components with the same name", () => {
+        const firstDefinition = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "characters",
+            ""
+        );
+
+        const secondDefinition = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "characters",
+            ""
+        );
+
+        expect(firstDefinition.id).not.toBe(secondDefinition.id);
+    });
+
+    test("identity does not depend on name formatting", () => {
+        const firstDefinition = createComponentDefinition(
             "Magic Item",
             ComponentState.Library,
             "core",
-            "Items",
+            "items",
             ""
         );
 
-        expect(definition.id).toBe("magic-item");
+        const secondDefinition = createComponentDefinition(
+            "  MAGIC   ITEM  ",
+            ComponentState.Library,
+            "core",
+            "items",
+            ""
+        );
+
+        expect(firstDefinition.id).not.toBe(secondDefinition.id);
     });
 
     test("trims component name and category ID", () => {
