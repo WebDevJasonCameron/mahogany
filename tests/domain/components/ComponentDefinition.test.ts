@@ -202,4 +202,25 @@ describe("ComponentDefinition", () => {
 
         expect(result.valid).toBe(true);
     });
+
+    test("creates a copy with a new identity while preserving lineage", () => {
+        const original = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "characters",
+            ""
+        );
+
+        const copy = createComponentDefinition(
+            original.name,
+            ComponentState.Package,
+            "ravenloft",
+            original.categoryId,
+            original.id
+        );
+
+        expect(copy.id).not.toBe(original.id);
+        expect(copy.copyOf).toBe(original.id);
+    });
 });

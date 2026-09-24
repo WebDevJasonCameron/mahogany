@@ -50,6 +50,7 @@ This text was written manually by the user.
         const restored =
             deserializeComponentDefinitionDocument(markdown);
 
+        expect(restored.definition.id).toBe(original.definition.id);
         expect(restored.definition).toEqual(original.definition);
         expect(restored.body).toBe(original.body);
     });
