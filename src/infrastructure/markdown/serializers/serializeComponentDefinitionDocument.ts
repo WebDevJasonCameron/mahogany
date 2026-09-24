@@ -12,8 +12,8 @@
  *
  * - Validates the ComponentDefinition.
  * - Builds the versioned YAML frontmatter representation.
- * - Includes definition identity, category, directory, copy/origin
- *   metadata, and field schema.
+ * - Includes definition identity, state, context, category, lineage,
+ *   and field schema.
  * - Serializes the frontmatter to YAML.
  * - Preserves the document's Markdown body.
  * - Combines the YAML frontmatter and Markdown body into a complete
@@ -24,9 +24,8 @@
  * are not backward compatible may require introducing a newer version and
  * corresponding deserialization/migration behavior.
  *
- * `copy` and `copyOf` are persisted so a copied Component Definition retains
- * information about the definition from which it originated across save
- * and load operations.
+ * `copyOf` is persisted so a copied Component Definition retains
+ * the identity of its immediate source across save and load operations.
  *
  * This function performs serialization only. It does not determine the
  * document's filesystem path or write files to disk; filesystem persistence
