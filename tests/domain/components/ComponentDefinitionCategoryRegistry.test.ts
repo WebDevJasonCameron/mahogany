@@ -44,4 +44,48 @@ describe("ComponentDefinitionCategoryRegistry", () => {
             ),
         ).toBe(false);
     });
+    
+    it("resolves categories by their singular category id", () => {
+        expect(
+            ComponentDefinitionCategoryRegistry.getById("character")
+        )?.toEqual({
+            id: "character",
+            name: "Characters",
+            directoryName: "Characters",
+        });
+
+        expect(
+            ComponentDefinitionCategoryRegistry.getById("location")
+        )?.toEqual({
+            id: "location",
+            name: "Locations",
+            directoryName: "Locations",
+        });
+
+        expect(
+            ComponentDefinitionCategoryRegistry.getById("profession")
+        )?.toEqual({
+            id: "profession",
+            name: "Professions",
+            directoryName: "Professions",
+        });
+    });
+
+    it("does not recognize old plural category ids", () => {
+        expect(
+            ComponentDefinitionCategoryRegistry.has("characters")
+        ).toBe(false);
+
+        expect(
+            ComponentDefinitionCategoryRegistry.has("items")
+        ).toBe(false);
+
+        expect(
+            ComponentDefinitionCategoryRegistry.has("locations")
+        ).toBe(false);
+
+        expect(
+            ComponentDefinitionCategoryRegistry.has("professions")
+        ).toBe(false);
+    });
 });
