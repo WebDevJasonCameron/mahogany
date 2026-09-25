@@ -1,30 +1,36 @@
 /**
  * ComponentDefinitionCategory
  *
- * Defines a category used to organize related Component Definitions
- * within Mahogany.
+ * Defines the metadata used to identify and represent a Component Definition
+ * category within Mahogany.
  *
- * A category represents a collection of Component Definitions rather
- * than an individual Component type. For example, the "characters"
- * category may contain definitions such as "character", "npc", or
- * other character-related Component Definitions.
+ * A category groups related Component Definitions, such as Characters,
+ * Items, Locations, Species, or Professions.
  *
- * `id` is the stable machine-facing identifier for the category.
- * Category IDs describe the collection and are therefore plural
- * (for example: "characters", "items", or "locations").
+ * `id` is the stable machine-readable identity of the category. Built-in
+ * category IDs use singular identifiers, such as `character`, `item`, and
+ * `location`. Category IDs are used by Component Definitions and must not
+ * be derived from the category's display name or filesystem directory name.
  *
- * `name` is the human-readable name used when presenting the category
- * to the user (for example: "Characters").
+ * `name` is the human-readable display name of the category. It may use a
+ * plural or otherwise user-friendly form, such as `Characters`.
  *
- * `directoryName` is the filesystem directory associated with the
- * category (for example: "characters"). It is kept separate from `id`
- * and `name` so Mahogany does not depend on display names or assume
- * that a category's identity and filesystem representation must always
- * be identical.
+ * `directoryName` is the filesystem representation of the category and
+ * identifies the directory under which Components belonging to the category
+ * are stored. It is defined independently from both `id` and `name`.
  *
- * This interface represents category metadata only. The available
- * categories and category lookup behavior are managed separately by
- * Mahogany's Component Definition category registry.
+ * These three values intentionally represent separate concepts:
+ *
+ *     id:            "character"
+ *     name:          "Characters"
+ *     directoryName: "Characters"
+ *
+ * Code must not assume that these values are interchangeable or derive one
+ * from another.
+ *
+ * This interface represents category metadata only. Registry lookup,
+ * validation, and filesystem path resolution are handled by their respective
+ * domain and infrastructure responsibilities.
  */
 
 export interface ComponentDefinitionCategory {
