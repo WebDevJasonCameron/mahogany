@@ -33,6 +33,7 @@
 
 import { ComponentDefinition } from "@/domain/components/models/ComponentDefinition";
 import { validateFieldDefinition } from "@/domain/components/validations/validateFieldDefinition";
+import {ComponentDefinitionCategoryRegistry} from "@/domain/components/models/ComponentDefinitionCategoryRegistry";
 
 export interface ValidationResult {
     valid: boolean;
@@ -75,6 +76,14 @@ export function validateComponentDefinition(
     ) {
         errors.push(
             "Component Definition category ID is invalid."
+        );
+    } else if (
+        !ComponentDefinitionCategoryRegistry.has(
+            definition.categoryId
+        )
+    ) {
+        errors.push(
+            `Component Definition category ID "${definition.categoryId}" is not registered.`
         );
     }
 

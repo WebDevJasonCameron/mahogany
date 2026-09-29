@@ -13,7 +13,7 @@ describe("ComponentDefinition", () => {
             name: "Character",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [
                 {
@@ -50,7 +50,7 @@ describe("ComponentDefinition", () => {
             name: "   ",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [],
         };
@@ -67,7 +67,7 @@ describe("ComponentDefinition", () => {
             name: "Character",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [
                 {
@@ -97,7 +97,7 @@ describe("ComponentDefinition", () => {
             name: "Character",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [
                 {
@@ -123,7 +123,7 @@ describe("ComponentDefinition", () => {
             "Character",
             ComponentState.Library,
             "core",
-            "characters",
+            "character",
             ""
         );
 
@@ -139,7 +139,7 @@ describe("ComponentDefinition", () => {
             "Character",
             ComponentState.Library,
             "core",
-            "characters",
+            "character",
             ""
         );
 
@@ -147,7 +147,7 @@ describe("ComponentDefinition", () => {
             "Character",
             ComponentState.Library,
             "core",
-            "characters",
+            "character",
             ""
         );
 
@@ -159,7 +159,7 @@ describe("ComponentDefinition", () => {
             "Magic Item",
             ComponentState.Library,
             "core",
-            "items",
+            "item",
             ""
         );
 
@@ -167,7 +167,7 @@ describe("ComponentDefinition", () => {
             "  MAGIC   ITEM  ",
             ComponentState.Library,
             "core",
-            "items",
+            "item",
             ""
         );
 
@@ -179,12 +179,12 @@ describe("ComponentDefinition", () => {
             "  Character  ",
             ComponentState.Library,
             "core",
-            "  characters  ",
+            "  character  ",
             ""
         );
 
         expect(definition.name).toBe("Character");
-        expect(definition.categoryId).toBe("characters");
+        expect(definition.categoryId).toBe("character");
     });
 
     test("accepts a safe component definition", () => {
@@ -193,7 +193,7 @@ describe("ComponentDefinition", () => {
             name: "Magic Item",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "items",
+            categoryId: "item",
             copyOf: "",
             fields: [],
         };
@@ -208,7 +208,7 @@ describe("ComponentDefinition", () => {
             "Character",
             ComponentState.Library,
             "core",
-            "characters",
+            "character",
             ""
         );
 
@@ -223,4 +223,24 @@ describe("ComponentDefinition", () => {
         expect(copy.id).not.toBe(original.id);
         expect(copy.copyOf).toBe(original.id);
     });
+
+    test("rejects an unregistered category ID", () => {
+        const definition: ComponentDefinition = {
+            id: "test-id",
+            name: "Spaceship",
+            state: ComponentState.Library,
+            stateId: "core",
+            categoryId: "spaceship",
+            copyOf: "",
+            fields: [],
+        };
+
+        const result = validateComponentDefinition(definition);
+
+        expect(result.valid).toBe(false);
+        expect(result.errors).toContain(
+            'Component Definition category ID "spaceship" is not registered.'
+        );
+    });
+    
 });
