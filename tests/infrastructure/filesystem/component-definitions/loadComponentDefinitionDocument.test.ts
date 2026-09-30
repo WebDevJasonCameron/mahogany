@@ -25,7 +25,7 @@ describe("loadComponentDefinitionDocument", () => {
                 workspaceRoot,
                 ".mahogany",
                 "definitions",
-                "characters"
+                "character"
             ),
             {
                 recursive: true,
@@ -49,7 +49,7 @@ id: character
 name: Character
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields:
   - key: name
@@ -65,7 +65,7 @@ fields:
             workspaceRoot,
             ".mahogany",
             "definitions",
-            "characters",
+            "character",
             "character.md"
         );
 
@@ -78,7 +78,7 @@ fields:
         const document =
             await loadComponentDefinitionDocument(
                 workspaceRoot,
-                "characters",
+                "character",
                 "character"
             );
 
@@ -87,7 +87,7 @@ fields:
             name: "Character",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [
                 {
@@ -107,7 +107,7 @@ fields:
         await expect(
             loadComponentDefinitionDocument(
                 workspaceRoot,
-                "characters",
+                "character",
                 "missing"
             )
         ).rejects.toThrow();

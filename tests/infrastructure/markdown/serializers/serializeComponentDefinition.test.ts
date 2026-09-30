@@ -13,7 +13,7 @@ describe("serializeComponentDefinitionDocument", () => {
             name: "Character",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [
                 {
@@ -50,7 +50,7 @@ id: character
 name: Character
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields:
   - key: name
@@ -77,7 +77,7 @@ fields:
             name: "",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [],
         };

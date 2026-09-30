@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { join } from "node:path";
 
 import {
-    getComponentDefinitionPath,
+    getComponentDefinitionPath, getDefinitionCategoryDirectory,
     getDefinitionsDirectory,
 } from "@/infrastructure/filesystem/paths/MahoganyPaths";
 
@@ -27,7 +27,7 @@ describe("MahoganyPaths", () => {
         expect(
             getComponentDefinitionPath(
                 workspaceRoot,
-                "characters",
+                "character",
                 "character"
             )
         ).toBe(
@@ -35,8 +35,26 @@ describe("MahoganyPaths", () => {
                 workspaceRoot,
                 ".mahogany",
                 "definitions",
-                "characters", 
+                "Characters",
                 "character.md"
+            )
+        );
+    });
+
+    test("resolves a category directory from registered category metadata", () => {
+        const workspaceRoot = "/test/workspace";
+
+        expect(
+            getDefinitionCategoryDirectory(
+                workspaceRoot,
+                "character"
+            )
+        ).toBe(
+            join(
+                workspaceRoot,
+                ".mahogany",
+                "definitions",
+                "Characters"
             )
         );
     });
@@ -53,6 +71,17 @@ describe("MahoganyPaths", () => {
         );
     });
 
+    test("rejects an unregistered Component Definition category ID", () => {
+        expect(() => {
+            getDefinitionCategoryDirectory(
+                "/test/workspace",
+                "spaceship"
+            );
+        }).toThrow(
+            'Component Definition category ID "spaceship" is not registered.'
+        );
+    });
+    
     test("rejects an ID containing a path separator", () => {
         expect(() => {
             getComponentDefinitionPath(

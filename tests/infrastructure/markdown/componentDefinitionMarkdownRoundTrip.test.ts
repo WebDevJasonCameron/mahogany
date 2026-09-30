@@ -13,7 +13,7 @@ describe("Component Definition Markdown round trip", () => {
             "Character",
             ComponentState.Library,
             "core",
-            "characters",
+            "character",
             "",
             [
                 {
@@ -64,7 +64,7 @@ id: character
 name: Character
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields: []
 ---

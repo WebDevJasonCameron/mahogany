@@ -31,7 +31,7 @@ describe("saveComponentDefinitionDocument", () => {
                 name: "Character",
                 state: ComponentState.Library,
                 stateId: "core",
-                categoryId: "characters",
+                categoryId: "character",
                 copyOf: "",
                 fields: [
                     {
@@ -55,7 +55,7 @@ describe("saveComponentDefinitionDocument", () => {
             workspaceRoot,
             ".mahogany",
             "definitions",
-            "characters",
+            "character",
             "character.md"
         );
 
@@ -82,7 +82,7 @@ describe("saveComponentDefinitionDocument", () => {
                 name: "Character",
                 state: ComponentState.Library,
                 stateId: "core",
-                categoryId: "characters",
+                categoryId: "character",
                 copyOf: "",
                 fields: [],
             },
@@ -99,7 +99,7 @@ describe("saveComponentDefinitionDocument", () => {
             workspaceRoot,
             ".mahogany",
             "definitions",
-            "characters",
+            "character",
             "character.md"
         );
 

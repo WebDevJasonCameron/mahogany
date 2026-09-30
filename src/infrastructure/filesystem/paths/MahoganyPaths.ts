@@ -46,13 +46,12 @@ import {
     relative,
     resolve,
 } from "node:path";
+import {ComponentDefinitionCategoryRegistry} from "@/domain/components/models/ComponentDefinitionCategoryRegistry";
 
 const SAFE_ID_PATTERN =
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export function getDefinitionsDirectory(
-    workspaceRoot: string
-): string {
+export function getDefinitionsDirectory(workspaceRoot: string): string {
     return resolve(
         workspaceRoot,
         ".mahogany",
@@ -69,16 +68,24 @@ export function getDefinitionCategoryDirectory(
         "Component Definition category ID"
     );
 
-    const definitionsDirectory =
-        getDefinitionsDirectory(
-            workspaceRoot
-        );
-
-    const categoryDirectory =
-        resolve(
-            definitionsDirectory,
+    const category =
+        ComponentDefinitionCategoryRegistry.getById(
             categoryId
         );
+
+    if (!category) {
+        throw new Error(
+            `Component Definition category ID "${categoryId}" is not registered.`
+        );
+    }
+
+    const definitionsDirectory =
+        getDefinitionsDirectory(workspaceRoot);
+
+    const categoryDirectory = resolve(
+        definitionsDirectory,
+        category.directoryName
+    );
 
     assertPathInsideDirectory(
         definitionsDirectory,
@@ -88,65 +95,28 @@ export function getDefinitionCategoryDirectory(
     return categoryDirectory;
 }
 
-export function getComponentDefinitionPath(
-    workspaceRoot: string,
-    categoryId: string,
-    componentDefinitionId: string
-): string {
-    assertSafeId(
-        componentDefinitionId,
-        "Component Definition ID"
-    );
+export function getComponentDefinitionPath(workspaceRoot: string, categoryId: string, componentDefinitionId: string): string {
+    assertSafeId(componentDefinitionId, "Component Definition ID");
 
-    const categoryDirectory =
-        getDefinitionCategoryDirectory(
-            workspaceRoot,
-            categoryId
-        );
+    const categoryDirectory = getDefinitionCategoryDirectory(workspaceRoot, categoryId);
 
-    const filePath =
-        resolve(
-            categoryDirectory,
-            `${componentDefinitionId}.md`
-        );
+    const filePath = resolve(categoryDirectory, `${componentDefinitionId}.md`);
 
-    assertPathInsideDirectory(
-        categoryDirectory,
-        filePath
-    );
+    assertPathInsideDirectory(categoryDirectory, filePath);
 
     return filePath;
 }
 
-function assertSafeId(
-    value: string,
-    label: string
-): void {
-    if (
-        !SAFE_ID_PATTERN.test(value)
-    ) {
-        throw new Error(
-            `Invalid ${label} "${value}".`
-        );
+function assertSafeId(value: string, label: string): void {
+    if (!SAFE_ID_PATTERN.test(value)) {
+        throw new Error(`Invalid ${label} "${value}".`);
     }
 }
 
-function assertPathInsideDirectory(
-    directory: string,
-    targetPath: string
-): void {
-    const relativePath =
-        relative(
-            directory,
-            targetPath
-        );
+function assertPathInsideDirectory(directory: string, targetPath: string): void {
+    const relativePath = relative(directory, targetPath);
 
-    if (
-        relativePath.startsWith("..") ||
-        relativePath === ""
-    ) {
-        throw new Error(
-            "Filesystem path must remain inside its expected directory."
-        );
+    if (relativePath.startsWith("..") || relativePath === "") {
+        throw new Error("Filesystem path must remain inside its expected directory.");
     }
 }

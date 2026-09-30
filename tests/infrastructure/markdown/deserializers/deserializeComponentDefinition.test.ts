@@ -14,7 +14,7 @@ id: character
 name: Character
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields:
   - key: name
@@ -41,7 +41,7 @@ fields:
             name: "Character",
             state: ComponentState.Library,
             stateId: "core",
-            categoryId: "characters",
+            categoryId: "character",
             copyOf: "",
             fields: [
                 {
@@ -83,7 +83,7 @@ id: character
 name: Character
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields: []
 ---
@@ -105,7 +105,7 @@ id: character
 name: Character
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields: []
 ---
@@ -127,7 +127,7 @@ id: character
 name: Character
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields: []
 ---
@@ -149,7 +149,7 @@ id: character
 name: ""
 state: library
 stateId: core
-categoryId: characters
+categoryId: character
 copyOf: ""
 fields: []
 ---

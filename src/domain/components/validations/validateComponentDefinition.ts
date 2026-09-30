@@ -7,17 +7,24 @@
  * Component-level validation currently ensures that:
  *
  * - `name` is not blank.
- * - `directory` is not blank.
- * - `directory` contains only filesystem-safe characters currently
+ * - `stateId` is not blank and contains only characters currently
  *   supported by Mahogany.
  * - `categoryId` is not blank and follows Mahogany's category ID format.
+ * - `categoryId` identifies a category registered in the
+ *   Component Definition Category Registry.
  * - Field keys are unique within the Component Definition.
  * - Every FieldDefinition satisfies its own validation rules.
  *
- * Category IDs use lowercase alphanumeric words separated by hyphens.
- * This validates the structure of a category ID, but does not determine
- * whether that ID exists in the Component Definition Category Registry.
- * Registry membership is a separate concern.
+ * Category IDs are stable machine-readable identifiers using lowercase
+ * alphanumeric words separated by hyphens. A syntactically valid category
+ * ID is not necessarily a valid Mahogany category; it must also resolve
+ * through the Component Definition Category Registry.
+ *
+ * Category membership is intentionally validated through the registry
+ * rather than against a hardcoded list of built-in category IDs. This keeps
+ * Component Definition validation independent of where registered categories
+ * originate and allows the registry to support additional category sources
+ * in the future without changing this validator's category-membership rule.
  *
  * Field-specific validation is delegated to `validateFieldDefinition`
  * rather than duplicated here. Any errors returned by the field validator
@@ -43,9 +50,7 @@ export interface ValidationResult {
 const DIRECTORY_PATTERN = /^[A-Za-z0-9 _-]+$/;
 const CATEGORY_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export function validateComponentDefinition(
-    definition: ComponentDefinition
-): ValidationResult {
+export function validateComponentDefinition(definition: ComponentDefinition): ValidationResult {
     const errors: string[] = [];
 
     if (!definition.name.trim()) {
@@ -53,12 +58,8 @@ export function validateComponentDefinition(
     }
 
     if (
-        definition.stateId.trim() &&
-        !DIRECTORY_PATTERN.test(definition.stateId)
-    ) {
-        errors.push(
-            `Component state ID "${definition.state}" contains invalid characters.`
-        );
+        definition.stateId.trim() && !DIRECTORY_PATTERN.test(definition.stateId)) {
+        errors.push(`Component state ID "${definition.stateId}" contains invalid characters.`);
     }
 
     if (!definition.stateId.trim()) {
@@ -66,25 +67,11 @@ export function validateComponentDefinition(
     }
 
     if (!definition.categoryId.trim()) {
-        errors.push(
-            "Component Definition category ID cannot be blank."
-        );
-    } else if (
-        !CATEGORY_ID_PATTERN.test(
-            definition.categoryId
-        )
-    ) {
-        errors.push(
-            "Component Definition category ID is invalid."
-        );
-    } else if (
-        !ComponentDefinitionCategoryRegistry.has(
-            definition.categoryId
-        )
-    ) {
-        errors.push(
-            `Component Definition category ID "${definition.categoryId}" is not registered.`
-        );
+        errors.push("Component Definition category ID cannot be blank.");
+    } else if (!CATEGORY_ID_PATTERN.test(definition.categoryId)) {
+        errors.push("Component Definition category ID is invalid.");
+    } else if (!ComponentDefinitionCategoryRegistry.has(definition.categoryId)) {
+        errors.push(`Component Definition category ID "${definition.categoryId}" is not registered.`);
     }
 
     const seenKeys = new Set<string>();
