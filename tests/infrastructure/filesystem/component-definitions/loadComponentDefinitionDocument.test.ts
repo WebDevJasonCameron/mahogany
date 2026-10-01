@@ -25,7 +25,7 @@ describe("loadComponentDefinitionDocument", () => {
                 workspaceRoot,
                 ".mahogany",
                 "definitions",
-                "character"
+                "Characters"
             ),
             {
                 recursive: true,
@@ -65,7 +65,7 @@ fields:
             workspaceRoot,
             ".mahogany",
             "definitions",
-            "character",
+            "Characters",
             "character.md"
         );
 
