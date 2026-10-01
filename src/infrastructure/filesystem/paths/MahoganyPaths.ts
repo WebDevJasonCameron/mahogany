@@ -4,22 +4,36 @@
  * Centralizes construction and safety validation of filesystem paths used
  * by Mahogany's Component Definition storage infrastructure.
  *
- * Component Definitions are currently stored beneath the workspace's
- * Mahogany metadata directory:
+ * Component Definitions are stored beneath the workspace's Mahogany
+ * metadata directory:
  *
- *     <workspace>/.mahogany/definitions/<category>/<definition-id>.md
+ *     <workspace>/.mahogany/definitions/<category-directory>/<definition-id>.md
  *
- * This module provides path-building functions so other parts of Mahogany
- * do not need to know or reproduce that filesystem structure themselves.
+ * Category identity and filesystem representation are intentionally
+ * separate concerns. Callers provide a stable `categoryId`, which is
+ * resolved through the Component Definition Category Registry. The
+ * registered category's explicit `directoryName` is then used when
+ * constructing the filesystem path.
+ *
+ * For example:
+ *
+ *     categoryId:    "character"
+ *     directoryName: "Characters"
+ *
+ * produces:
+ *
+ *     <workspace>/.mahogany/definitions/Characters/<definition-id>.md
  *
  * `getDefinitionsDirectory()` resolves the root directory containing all
  * Component Definition categories.
  *
- * `getDefinitionCategoryDirectory()` resolves the directory containing
- * Component Definitions for a particular category.
+ * `getDefinitionCategoryDirectory()` validates the supplied category ID,
+ * verifies that the category is registered, and resolves its directory
+ * using the category's registered `directoryName`.
  *
  * `getComponentDefinitionPath()` resolves the Markdown file belonging to
- * a particular Component Definition within its category.
+ * a particular Component Definition within its registered category
+ * directory.
  *
  * IDs used to construct filesystem paths must satisfy `SAFE_ID_PATTERN`.
  * Safe IDs contain lowercase alphanumeric words optionally separated by
@@ -33,20 +47,13 @@
  *
  * This module determines filesystem locations only. It does not create,
  * read, write, serialize, or deserialize files.
- *
- * NOTE:
- * Category directories are currently resolved directly from `categoryId`.
- * As Mahogany's Component Definition Category Registry is integrated,
- * category IDs may instead be resolved through the registry to obtain the
- * category's explicit `directoryName`. Keeping path construction centralized
- * here allows that storage rule to change without affecting callers.
  */
 
 import {
     relative,
     resolve,
 } from "node:path";
-import {ComponentDefinitionCategoryRegistry} from "@/domain/components/models/ComponentDefinitionCategoryRegistry";
+import { ComponentDefinitionCategoryRegistry } from "@/domain/components/models/ComponentDefinitionCategoryRegistry";
 
 const SAFE_ID_PATTERN =
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
