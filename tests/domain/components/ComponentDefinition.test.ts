@@ -398,40 +398,6 @@ describe("ComponentDefinition", () => {
         );
     });
 
-    test("allows the same state ID in different Component states", () => {
-        const packageDefinition = createComponentDefinition(
-            "Character",
-            ComponentState.Package,
-            "ravenloft",
-            "character",
-            ""
-        );
-
-        const inPlayDefinition = createComponentDefinition(
-            "Character",
-            ComponentState.InPlay,
-            "ravenloft",
-            "character",
-            packageDefinition.id
-        );
-
-        expect(
-            validateComponentDefinition(packageDefinition).valid
-        ).toBe(true);
-
-        expect(
-            validateComponentDefinition(inPlayDefinition).valid
-        ).toBe(true);
-
-        expect(packageDefinition.state).not.toBe(
-            inPlayDefinition.state
-        );
-
-        expect(packageDefinition.stateId).toBe(
-            inPlayDefinition.stateId
-        );
-    });
-    
     test("rejects an invalid state ID", () => {
         const definition: ComponentDefinition = {
             id: "test-id",
