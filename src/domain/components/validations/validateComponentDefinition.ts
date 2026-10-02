@@ -47,8 +47,8 @@ export interface ValidationResult {
     errors: string[];
 }
 
-const DIRECTORY_PATTERN = /^[A-Za-z0-9 _-]+$/;
 const CATEGORY_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const STATE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function validateComponentDefinition(definition: ComponentDefinition): ValidationResult {
     const errors: string[] = [];
@@ -57,13 +57,14 @@ export function validateComponentDefinition(definition: ComponentDefinition): Va
         errors.push("Component name is required.");
     }
 
-    if (
-        definition.stateId.trim() && !DIRECTORY_PATTERN.test(definition.stateId)) {
-        errors.push(`Component state ID "${definition.stateId}" contains invalid characters.`);
-    }
-
     if (!definition.stateId.trim()) {
-        errors.push("Component Definition state ID cannot be blank.");
+        errors.push(
+            "Component Definition state ID cannot be blank."
+        );
+    } else if (!STATE_ID_PATTERN.test(definition.stateId)) {
+        errors.push(
+            `Component Definition state ID "${definition.stateId}" is invalid.`
+        );
     }
 
     if (!definition.categoryId.trim()) {

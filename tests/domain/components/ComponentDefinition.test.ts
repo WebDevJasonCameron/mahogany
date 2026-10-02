@@ -174,16 +174,17 @@ describe("ComponentDefinition", () => {
         expect(firstDefinition.id).not.toBe(secondDefinition.id);
     });
 
-    test("trims component name and category ID", () => {
+    test("trims component name, state ID, and category ID", () => {
         const definition = createComponentDefinition(
             "  Character  ",
             ComponentState.Library,
-            "core",
+            "  core  ",
             "  character  ",
             ""
         );
 
         expect(definition.name).toBe("Character");
+        expect(definition.stateId).toBe("core");
         expect(definition.categoryId).toBe("character");
     });
 
@@ -240,6 +241,77 @@ describe("ComponentDefinition", () => {
         expect(result.valid).toBe(false);
         expect(result.errors).toContain(
             'Component Definition category ID "spaceship" is not registered.'
+        );
+    });
+
+    test("accepts Component Definitions in each supported state", () => {
+        const states = [
+            {
+                state: ComponentState.Library,
+                stateId: "core",
+            },
+            {
+                state: ComponentState.Package,
+                stateId: "ravenloft",
+            },
+            {
+                state: ComponentState.InPlay,
+                stateId: "ravenloft-saturday",
+            },
+        ];
+
+        for (const { state, stateId } of states) {
+            const definition: ComponentDefinition = {
+                id: "test-id",
+                name: "Character",
+                state,
+                stateId,
+                categoryId: "character",
+                copyOf: "",
+                fields: [],
+            };
+
+            const result =
+                validateComponentDefinition(definition);
+
+            expect(result.valid).toBe(true);
+        }
+    });
+
+    test("allows a library Component Definition to use a non-core state ID", () => {
+        const definition: ComponentDefinition = {
+            id: "test-id",
+            name: "Character",
+            state: ComponentState.Library,
+            stateId: "homebrew",
+            categoryId: "character",
+            copyOf: "",
+            fields: [],
+        };
+
+        const result =
+            validateComponentDefinition(definition);
+
+        expect(result.valid).toBe(true);
+    });
+
+    test("rejects an invalid state ID", () => {
+        const definition: ComponentDefinition = {
+            id: "test-id",
+            name: "Character",
+            state: ComponentState.Package,
+            stateId: "Ravenloft Saturday",
+            categoryId: "character",
+            copyOf: "",
+            fields: [],
+        };
+
+        const result =
+            validateComponentDefinition(definition);
+
+        expect(result.valid).toBe(false);
+        expect(result.errors).toContain(
+            'Component Definition state ID "Ravenloft Saturday" is invalid.'
         );
     });
     
