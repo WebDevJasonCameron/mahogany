@@ -96,4 +96,35 @@ This paragraph was manually edited.
 Do not erase this content.
 `);
     });
+
+    test("preserves state and state ID through Markdown round trip", () => {
+        const definition = createComponentDefinition(
+            "Character",
+            ComponentState.InPlay,
+            "ravenloft-saturday",
+            "character",
+            ""
+        );
+
+        const original: ComponentDefinitionDocument = {
+            definition,
+            body: "# Character\n",
+        };
+
+        const markdown =
+            serializeComponentDefinitionDocument(original);
+
+        const restored =
+            deserializeComponentDefinitionDocument(markdown);
+
+        expect(restored.definition.state).toBe(
+            ComponentState.InPlay
+        );
+
+        expect(restored.definition.stateId).toBe(
+            "ravenloft-saturday"
+        );
+    });
+    
+    
 });

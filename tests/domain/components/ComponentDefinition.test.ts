@@ -295,6 +295,143 @@ describe("ComponentDefinition", () => {
         expect(result.valid).toBe(true);
     });
 
+    test("distinguishes copies of the same source in different Package contexts", () => {
+        const source = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "character",
+            ""
+        );
+
+        const ravenloftCopy = createComponentDefinition(
+            source.name,
+            ComponentState.Package,
+            "ravenloft",
+            source.categoryId,
+            source.id
+        );
+
+        const saltmarshCopy = createComponentDefinition(
+            source.name,
+            ComponentState.Package,
+            "saltmarsh",
+            source.categoryId,
+            source.id
+        );
+
+        expect(ravenloftCopy.state).toBe(ComponentState.Package);
+        expect(saltmarshCopy.state).toBe(ComponentState.Package);
+
+        expect(ravenloftCopy.stateId).not.toBe(
+            saltmarshCopy.stateId
+        );
+
+        expect(ravenloftCopy.copyOf).toBe(source.id);
+        expect(saltmarshCopy.copyOf).toBe(source.id);
+    });
+
+    test("distinguishes copies in different InPlay contexts", () => {
+        const packageDefinition = createComponentDefinition(
+            "Character",
+            ComponentState.Package,
+            "ravenloft",
+            "character",
+            ""
+        );
+
+        const saturdayRun = createComponentDefinition(
+            packageDefinition.name,
+            ComponentState.InPlay,
+            "ravenloft-saturday",
+            packageDefinition.categoryId,
+            packageDefinition.id
+        );
+
+        const jamesRun = createComponentDefinition(
+            packageDefinition.name,
+            ComponentState.InPlay,
+            "ravenloft-james",
+            packageDefinition.categoryId,
+            packageDefinition.id
+        );
+
+        expect(saturdayRun.stateId).not.toBe(jamesRun.stateId);
+
+        expect(saturdayRun.copyOf).toBe(packageDefinition.id);
+        expect(jamesRun.copyOf).toBe(packageDefinition.id);
+
+        expect(saturdayRun.id).not.toBe(jamesRun.id);
+    });
+
+    test("allows the same state ID in different Component states", () => {
+        const packageDefinition = createComponentDefinition(
+            "Character",
+            ComponentState.Package,
+            "ravenloft",
+            "character",
+            ""
+        );
+
+        const inPlayDefinition = createComponentDefinition(
+            "Character",
+            ComponentState.InPlay,
+            "ravenloft",
+            "character",
+            packageDefinition.id
+        );
+
+        expect(
+            validateComponentDefinition(packageDefinition).valid
+        ).toBe(true);
+
+        expect(
+            validateComponentDefinition(inPlayDefinition).valid
+        ).toBe(true);
+
+        expect(packageDefinition.state).not.toBe(
+            inPlayDefinition.state
+        );
+
+        expect(packageDefinition.stateId).toBe(
+            inPlayDefinition.stateId
+        );
+    });
+
+    test("allows the same state ID in different Component states", () => {
+        const packageDefinition = createComponentDefinition(
+            "Character",
+            ComponentState.Package,
+            "ravenloft",
+            "character",
+            ""
+        );
+
+        const inPlayDefinition = createComponentDefinition(
+            "Character",
+            ComponentState.InPlay,
+            "ravenloft",
+            "character",
+            packageDefinition.id
+        );
+
+        expect(
+            validateComponentDefinition(packageDefinition).valid
+        ).toBe(true);
+
+        expect(
+            validateComponentDefinition(inPlayDefinition).valid
+        ).toBe(true);
+
+        expect(packageDefinition.state).not.toBe(
+            inPlayDefinition.state
+        );
+
+        expect(packageDefinition.stateId).toBe(
+            inPlayDefinition.stateId
+        );
+    });
+    
     test("rejects an invalid state ID", () => {
         const definition: ComponentDefinition = {
             id: "test-id",

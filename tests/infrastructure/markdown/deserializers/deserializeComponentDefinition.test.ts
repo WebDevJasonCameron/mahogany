@@ -96,28 +96,6 @@ fields: []
         );
     });
 
-    test("rejects the wrong Mahogany document type", () => {
-        const markdown = `---
-mahogany:
-  type: component
-  version: 1
-id: character
-name: Character
-state: library
-stateId: core
-categoryId: character
-copyOf: ""
-fields: []
----
-`;
-
-        expect(() => {
-            deserializeComponentDefinitionDocument(markdown);
-        }).toThrow(
-            "Cannot deserialize Component Definition: Invalid Mahogany document type."
-        );
-    });
-
     test("rejects an unsupported Component Definition version", () => {
         const markdown = `---
 mahogany:
@@ -159,6 +137,50 @@ fields: []
             deserializeComponentDefinitionDocument(markdown);
         }).toThrow(
             "Cannot deserialize invalid Component Definition"
+        );
+    });
+
+    test("rejects a Component Definition with an invalid state ID", () => {
+        const markdown = `---
+mahogany:
+  type: component-definition
+  version: 1
+id: character
+name: Character
+state: package
+stateId: Ravenloft Saturday
+categoryId: character
+copyOf: ""
+fields: []
+---
+`;
+
+        expect(() => {
+            deserializeComponentDefinitionDocument(markdown);
+        }).toThrow(
+            "Cannot deserialize invalid Component Definition"
+        );
+    });
+
+    test("rejects an unsupported Component state", () => {
+        const markdown = `---
+mahogany:
+  type: component-definition
+  version: 1
+id: character
+name: Character
+state: archived
+stateId: core
+categoryId: character
+copyOf: ""
+fields: []
+---
+`;
+
+        expect(() => {
+            deserializeComponentDefinitionDocument(markdown);
+        }).toThrow(
+            "Cannot deserialize Component Definition: Invalid frontmatter structure."
         );
     });
 });
