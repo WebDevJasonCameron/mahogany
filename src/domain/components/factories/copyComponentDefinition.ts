@@ -13,5 +13,9 @@ export function copyComponentDefinition(
         state,
         stateId: stateId.trim(),
         copyOf: source.id,
+        fields: source.fields.map(field => ({
+            ...field,
+            options: field.options ? [...field.options] : undefined,
+        })),
     };
 }
