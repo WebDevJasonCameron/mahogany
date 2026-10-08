@@ -55,7 +55,6 @@ export function createComponentDefinition(
     state: ComponentState,
     stateId: string,
     categoryId: string,
-    copyOf: string,
     fields: FieldDefinition[] = []
 ): ComponentDefinition {
     return {
@@ -64,7 +63,7 @@ export function createComponentDefinition(
         state,
         stateId: stateId.trim(),
         categoryId: categoryId.trim(),
-        copyOf: copyOf.trim(),
+        copyOf: "",
         fields,
     };
 }

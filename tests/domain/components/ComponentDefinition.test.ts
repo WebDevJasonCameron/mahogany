@@ -124,7 +124,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            ""
         );
 
         expect(definition.id).toMatch(
@@ -140,7 +139,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            ""
         );
 
         const secondDefinition = createComponentDefinition(
@@ -148,7 +146,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            ""
         );
 
         expect(firstDefinition.id).not.toBe(secondDefinition.id);
@@ -160,7 +157,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "item",
-            ""
         );
 
         const secondDefinition = createComponentDefinition(
@@ -168,7 +164,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "item",
-            ""
         );
 
         expect(firstDefinition.id).not.toBe(secondDefinition.id);
@@ -180,7 +175,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "  core  ",
             "  character  ",
-            ""
         );
 
         expect(definition.name).toBe("Character");
@@ -210,7 +204,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            ""
         );
 
         const copy = createComponentDefinition(
@@ -218,11 +211,9 @@ describe("ComponentDefinition", () => {
             ComponentState.Package,
             "ravenloft",
             original.categoryId,
-            original.id
         );
 
         expect(copy.id).not.toBe(original.id);
-        expect(copy.copyOf).toBe(original.id);
     });
 
     test("rejects an unregistered category ID", () => {
@@ -301,7 +292,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            ""
         );
 
         const ravenloftCopy = createComponentDefinition(
@@ -309,7 +299,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Package,
             "ravenloft",
             source.categoryId,
-            source.id
         );
 
         const saltmarshCopy = createComponentDefinition(
@@ -317,7 +306,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Package,
             "saltmarsh",
             source.categoryId,
-            source.id
         );
 
         expect(ravenloftCopy.state).toBe(ComponentState.Package);
@@ -326,9 +314,7 @@ describe("ComponentDefinition", () => {
         expect(ravenloftCopy.stateId).not.toBe(
             saltmarshCopy.stateId
         );
-
-        expect(ravenloftCopy.copyOf).toBe(source.id);
-        expect(saltmarshCopy.copyOf).toBe(source.id);
+        
     });
 
     test("distinguishes copies in different InPlay contexts", () => {
@@ -337,7 +323,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Package,
             "ravenloft",
             "character",
-            ""
         );
 
         const saturdayRun = createComponentDefinition(
@@ -345,7 +330,6 @@ describe("ComponentDefinition", () => {
             ComponentState.InPlay,
             "ravenloft-saturday",
             packageDefinition.categoryId,
-            packageDefinition.id
         );
 
         const jamesRun = createComponentDefinition(
@@ -353,13 +337,9 @@ describe("ComponentDefinition", () => {
             ComponentState.InPlay,
             "ravenloft-james",
             packageDefinition.categoryId,
-            packageDefinition.id
         );
 
         expect(saturdayRun.stateId).not.toBe(jamesRun.stateId);
-
-        expect(saturdayRun.copyOf).toBe(packageDefinition.id);
-        expect(jamesRun.copyOf).toBe(packageDefinition.id);
 
         expect(saturdayRun.id).not.toBe(jamesRun.id);
     });
@@ -370,7 +350,6 @@ describe("ComponentDefinition", () => {
             ComponentState.Package,
             "ravenloft",
             "character",
-            ""
         );
 
         const inPlayDefinition = createComponentDefinition(
@@ -378,7 +357,6 @@ describe("ComponentDefinition", () => {
             ComponentState.InPlay,
             "ravenloft",
             "character",
-            packageDefinition.id
         );
 
         expect(

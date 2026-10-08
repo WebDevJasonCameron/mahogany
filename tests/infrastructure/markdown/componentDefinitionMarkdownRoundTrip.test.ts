@@ -14,7 +14,6 @@ describe("Component Definition Markdown round trip", () => {
             ComponentState.Library,
             "core",
             "character",
-            "",
             [
                 {
                     key: "name",
@@ -103,7 +102,6 @@ Do not erase this content.
             ComponentState.InPlay,
             "ravenloft-saturday",
             "character",
-            ""
         );
 
         const original: ComponentDefinitionDocument = {

@@ -12,7 +12,6 @@ describe("copyComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            ""
         );
 
         const copy = copyComponentDefinition(
@@ -34,7 +33,6 @@ describe("copyComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            "",
             [
                 {
                     key: "characterType",
@@ -65,7 +63,6 @@ describe("copyComponentDefinition", () => {
             ComponentState.Library,
             "core",
             "character",
-            ""
         );
 
         const packageDefinition = copyComponentDefinition(
