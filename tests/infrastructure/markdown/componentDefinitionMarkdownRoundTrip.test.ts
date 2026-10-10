@@ -6,6 +6,7 @@ import { FieldType } from "@/domain/components/models/FieldType";
 import { deserializeComponentDefinitionDocument } from "@/infrastructure/markdown/deserializers/deserializeComponentDefinitionDocument";
 import { serializeComponentDefinitionDocument } from "@/infrastructure/markdown/serializers/serializeComponentDefinitionDocument";
 import {ComponentState} from "@/domain/components/models/ComponentState";
+import {copyComponentDefinition} from "@/domain/components/factories/copyComponentDefinition";
 
 describe("Component Definition Markdown round trip", () => {
     test("preserves the definition and Markdown body", () => {
@@ -123,6 +124,30 @@ Do not erase this content.
             "ravenloft-saturday"
         );
     });
-    
-    
+
+    test("preserves copyOf lineage through Markdown round trip", () => {
+        const source = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "character"
+        );
+
+        const copy = copyComponentDefinition(
+            source,
+            ComponentState.Package,
+            "ravenloft"
+        );
+
+        const original: ComponentDefinitionDocument = {
+            definition: copy,
+            body: "# Character\n",
+        };
+
+        const markdown = serializeComponentDefinitionDocument(original);
+        const restored = deserializeComponentDefinitionDocument(markdown);
+
+        expect(restored.definition.id).toBe(copy.id);
+        expect(restored.definition.copyOf).toBe(source.id);
+    });
 });

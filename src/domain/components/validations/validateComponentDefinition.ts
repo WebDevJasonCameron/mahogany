@@ -6,6 +6,10 @@
  *
  * Component-level validation currently ensures that:
  *
+ * Lineage validation verifies only the format of a non-empty `copyOf`
+ * reference. It does not determine whether the referenced source object
+ * exists. Source resolution requires access to other domain objects and is
+ * therefore outside this validator's responsibility.
  * - `name` is not blank.
  * - `stateId` is not blank and contains only characters currently
  *   supported by Mahogany.

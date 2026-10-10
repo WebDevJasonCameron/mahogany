@@ -183,4 +183,24 @@ fields: []
             "Cannot deserialize Component Definition: Invalid frontmatter structure."
         );
     });
+
+    test("rejects a Component Definition with a malformed copyOf ID", () => {
+        const markdown = `---
+mahogany:
+  type: component-definition
+  version: 1
+id: 550e8400-e29b-41d4-a716-446655440000
+name: Character
+state: package
+stateId: ravenloft
+categoryId: character
+copyOf: not-a-valid-id
+fields: []
+---
+`;
+
+        expect(() => {
+            deserializeComponentDefinitionDocument(markdown);
+        }).toThrow("Cannot deserialize invalid Component Definition");
+    });
 });

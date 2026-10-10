@@ -1,12 +1,12 @@
 /**
  * createComponentDefinition
  *
- * Factory for creating a new ComponentDefinition from the information
- * supplied by Mahogany or the user.
+ * Factory for creating a newly authored root ComponentDefinition from the
+ * information supplied by Mahogany or the user.
  *
- * The factory provides a single, consistent creation path for Component
- * Definitions rather than requiring callers to construct the domain object
- * manually.
+ * The factory provides a single, consistent creation path for new root
+ * Component Definitions rather than requiring callers to construct the
+ * domain object manually.
  *
  * When creating a definition, this factory:
  *
@@ -15,7 +15,8 @@
  * - Stores the supplied Component lifecycle `state`.
  * - Trims surrounding whitespace from `stateId`.
  * - Trims surrounding whitespace from `categoryId`.
- * - Trims and stores the immediate parent definition identifier in `copyOf`.
+ * - Sets `copyOf` to an empty string because a newly authored definition
+ *   has no upstream Mahogany source.
  * - Accepts an optional collection of FieldDefinitions, defaulting to an
  *   empty collection when no fields are supplied.
  *
@@ -31,10 +32,11 @@
  * multiple packages or inPlay runs to exist independently while sharing the
  * same lifecycle state.
  *
- * `copyOf` records the ID of the immediate Component Definition from which
- * this definition was copied. An empty value indicates that the definition
- * has no parent in its lineage. A copied definition receives its own new ID
- * while retaining its immediate parent's ID through `copyOf`.
+ * A newly authored definition is a lineage root, represented by `copyOf`
+ * containing an empty string. Definitions copied from an existing definition
+ * must instead be created through `copyComponentDefinition`, which assigns
+ * the copy its own identity and records the immediate source definition's ID
+ * in `copyOf`.
  *
  * ID generation is delegated to `createId()`, which implements Mahogany's
  * UUID v4 identity strategy.

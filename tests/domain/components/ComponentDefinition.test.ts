@@ -5,6 +5,7 @@ import { FieldType } from "@/domain/components/models/FieldType";
 import { validateComponentDefinition } from "@/domain/components/validations/validateComponentDefinition";
 import { createComponentDefinition } from "@/domain/components/factories/createComponentDefinition";
 import {ComponentState} from "@/domain/components/models/ComponentState";
+import {copyComponentDefinition} from "@/domain/components/factories/copyComponentDefinition";
 
 describe("ComponentDefinition", () => {
     test("accepts a valid Character component definition", () => {
@@ -412,5 +413,26 @@ describe("ComponentDefinition", () => {
         expect(result.errors).toContain(
             'Component Definition copyOf ID "not-a-valid-id" is invalid.'
         );
+    });
+
+    test("accepts a valid copyOf ID", () => {
+        const source = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "character"
+        );
+
+        const copy = copyComponentDefinition(
+            source,
+            ComponentState.Package,
+            "ravenloft"
+        );
+
+        const result = validateComponentDefinition(copy);
+
+        expect(result.valid).toBe(true);
+        expect(result.errors).toEqual([]);
+        expect(copy.copyOf).toBe(source.id);
     });
 });
