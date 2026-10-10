@@ -28,9 +28,9 @@
  * defined separately by ComponentDefinitionCategory and its registry.
  *
  * `copyOf` records the stable ID of the immediate definition from which this
- * definition was copied. An empty value indicates that the definition has
- * no parent in its lineage. This allows copied definitions to evolve
- * independently while preserving their provenance.
+ * definition was copied. A null value indicates that the definition is a
+ * lineage root with no upstream source. This allows copied definitions to
+ * evolve independently while preserving their provenance.
  *
  * `fields` describes the fields available to the Component, including their
  * keys, labels, types, requirements, and other field-specific configuration.

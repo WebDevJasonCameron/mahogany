@@ -15,8 +15,8 @@
  * - Stores the supplied Component lifecycle `state`.
  * - Trims surrounding whitespace from `stateId`.
  * - Trims surrounding whitespace from `categoryId`.
- * - Sets `copyOf` to an empty string because a newly authored definition
- *   has no upstream Mahogany source.
+ * - Sets `copyOf` to `null` because a newly authored definition has no
+ *   upstream Mahogany source.
  * - Accepts an optional collection of FieldDefinitions, defaulting to an
  *   empty collection when no fields are supplied.
  *
@@ -33,9 +33,9 @@
  * same lifecycle state.
  *
  * A newly authored definition is a lineage root, represented by `copyOf`
- * containing an empty string. Definitions copied from an existing definition
- * must instead be created through `copyComponentDefinition`, which assigns
- * the copy its own identity and records the immediate source definition's ID
+ * containing `null`. Definitions copied from an existing definition must
+ * instead be created through `copyComponentDefinition`, which assigns the
+ * copy its own identity and records the immediate source definition's ID
  * in `copyOf`.
  *
  * ID generation is delegated to `createId()`, which implements Mahogany's

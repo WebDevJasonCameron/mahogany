@@ -16,8 +16,8 @@
  * context within that state.
  *
  * `copyOf` stores the identifier of the immediate Component Definition from
- * which this definition was copied. An empty value indicates that the
- * definition has no parent in its lineage.
+ * which this definition was copied. A null value indicates that the
+ * definition is a lineage root with no upstream source.
  *
  * This schema validates the serialized structure and primitive data types
  * of the frontmatter. Higher-level Mahogany domain rules remain the

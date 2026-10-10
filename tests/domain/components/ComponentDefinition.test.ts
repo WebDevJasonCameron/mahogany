@@ -207,16 +207,15 @@ describe("ComponentDefinition", () => {
             "character",
         );
 
-        const copy = createComponentDefinition(
-            original.name,
+        const copy = copyComponentDefinition(
+            original,
             ComponentState.Package,
             "ravenloft",
-            original.categoryId,
         );
 
         expect(copy.id).not.toBe(original.id);
+        expect(copy.copyOf).toBe(original.id);
     });
-
     test("rejects an unregistered category ID", () => {
         const definition: ComponentDefinition = {
             id: "test-id",
@@ -453,22 +452,5 @@ describe("ComponentDefinition", () => {
             'Component Definition copyOf ID "" is invalid.'
         );
     });
-
-    test("rejects an empty copyOf ID", () => {
-        const definition = createComponentDefinition(
-            "Character",
-            ComponentState.Library,
-            "core",
-            "character"
-        );
-
-        definition.copyOf = "";
-
-        const result = validateComponentDefinition(definition);
-
-        expect(result.valid).toBe(false);
-        expect(result.errors).toContain(
-            'Component Definition copyOf ID "" is invalid.'
-        );
-    });
+    
 });
