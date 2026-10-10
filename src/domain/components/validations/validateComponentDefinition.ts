@@ -72,7 +72,7 @@ export function validateComponentDefinition(definition: ComponentDefinition): Va
         );
     }
 
-    if (definition.copyOf && !isValidId(definition.copyOf)) {
+    if (definition.copyOf !== null && !isValidId(definition.copyOf)) {
         errors.push(
             `Component Definition copyOf ID "${definition.copyOf}" is invalid.`
         );

@@ -33,7 +33,7 @@ describe("Component Definition filesystem round trip", () => {
                 state: ComponentState.Library,
                 stateId: "core",
                 categoryId: "character",
-                copyOf: "",
+                copyOf: null,
                 fields: [
                     {
                         key: "name",

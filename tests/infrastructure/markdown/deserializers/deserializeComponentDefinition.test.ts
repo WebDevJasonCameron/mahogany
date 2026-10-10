@@ -15,7 +15,7 @@ name: Character
 state: library
 stateId: core
 categoryId: character
-copyOf: ""
+copyOf: null
 fields:
   - key: name
     label: Name
@@ -42,7 +42,7 @@ fields:
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [
                 {
                     key: "name",
@@ -84,7 +84,7 @@ name: Character
 state: library
 stateId: core
 categoryId: character
-copyOf: ""
+copyOf: null
 fields: []
 ---
 `;
@@ -106,7 +106,7 @@ name: Character
 state: library
 stateId: core
 categoryId: character
-copyOf: ""
+copyOf: null
 fields: []
 ---
 `;
@@ -128,7 +128,7 @@ name: ""
 state: library
 stateId: core
 categoryId: character
-copyOf: ""
+copyOf: null
 fields: []
 ---
 `;
@@ -150,7 +150,7 @@ name: Character
 state: package
 stateId: Ravenloft Saturday
 categoryId: character
-copyOf: ""
+copyOf: null
 fields: []
 ---
 `;
@@ -172,7 +172,7 @@ name: Character
 state: archived
 stateId: core
 categoryId: character
-copyOf: ""
+copyOf: null
 fields: []
 ---
 `;

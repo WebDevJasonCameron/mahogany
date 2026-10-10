@@ -50,6 +50,6 @@ export interface ComponentDefinition {
     state: ComponentState;
     stateId: string;
     categoryId: string;
-    copyOf: string;
+    copyOf: string | null;
     fields: FieldDefinition[];
 }

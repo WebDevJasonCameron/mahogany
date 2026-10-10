@@ -56,6 +56,6 @@ export const ComponentDefinitionFrontmatterSchema = z.object({
     state: z.enum(ComponentState),
     stateId: z.string(),
     categoryId: z.string(),
-    copyOf: z.string(),
+    copyOf: z.string().nullable(),
     fields: z.array(FieldDefinitionSchema),
 });

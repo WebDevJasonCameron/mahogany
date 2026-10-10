@@ -65,7 +65,7 @@ name: Character
 state: library
 stateId: core
 categoryId: character
-copyOf: ""
+copyOf: null
 fields: []
 ---
 

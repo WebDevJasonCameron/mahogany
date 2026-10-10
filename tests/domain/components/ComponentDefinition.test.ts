@@ -15,7 +15,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [
                 {
                     key: "name",
@@ -52,7 +52,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [],
         };
 
@@ -69,7 +69,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [
                 {
                     key: "name",
@@ -99,7 +99,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [
                 {
                     key: "characterType",
@@ -190,7 +190,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "item",
-            copyOf: "",
+            copyOf: null,
             fields: [],
         };
 
@@ -224,7 +224,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "spaceship",
-            copyOf: "",
+            copyOf: null,
             fields: [],
         };
 
@@ -259,7 +259,7 @@ describe("ComponentDefinition", () => {
                 state,
                 stateId,
                 categoryId: "character",
-                copyOf: "",
+                copyOf: null,
                 fields: [],
             };
 
@@ -277,7 +277,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Library,
             stateId: "homebrew",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [],
         };
 
@@ -384,7 +384,7 @@ describe("ComponentDefinition", () => {
             state: ComponentState.Package,
             stateId: "Ravenloft Saturday",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [],
         };
 
@@ -434,5 +434,41 @@ describe("ComponentDefinition", () => {
         expect(result.valid).toBe(true);
         expect(result.errors).toEqual([]);
         expect(copy.copyOf).toBe(source.id);
+    });
+
+    test("rejects an empty copyOf ID", () => {
+        const definition = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "character"
+        );
+
+        definition.copyOf = "";
+
+        const result = validateComponentDefinition(definition);
+
+        expect(result.valid).toBe(false);
+        expect(result.errors).toContain(
+            'Component Definition copyOf ID "" is invalid.'
+        );
+    });
+
+    test("rejects an empty copyOf ID", () => {
+        const definition = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "character"
+        );
+
+        definition.copyOf = "";
+
+        const result = validateComponentDefinition(definition);
+
+        expect(result.valid).toBe(false);
+        expect(result.errors).toContain(
+            'Component Definition copyOf ID "" is invalid.'
+        );
     });
 });

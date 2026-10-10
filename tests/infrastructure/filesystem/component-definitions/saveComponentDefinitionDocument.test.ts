@@ -32,7 +32,7 @@ describe("saveComponentDefinitionDocument", () => {
                 state: ComponentState.Library,
                 stateId: "core",
                 categoryId: "character",
-                copyOf: "",
+                copyOf: null,
                 fields: [
                     {
                         key: "name",
@@ -83,7 +83,7 @@ describe("saveComponentDefinitionDocument", () => {
                 state: ComponentState.Library,
                 stateId: "core",
                 categoryId: "character",
-                copyOf: "",
+                copyOf: null,
                 fields: [],
             },
             body: `# Character

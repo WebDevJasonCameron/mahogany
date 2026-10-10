@@ -65,7 +65,7 @@ export function createComponentDefinition(
         state,
         stateId: stateId.trim(),
         categoryId: categoryId.trim(),
-        copyOf: "",
+        copyOf: null,
         fields,
     };
 }

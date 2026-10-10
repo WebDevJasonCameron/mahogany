@@ -12,7 +12,7 @@ describe("copyComponentDefinition", () => {
             []
         );
 
-        expect(definition.copyOf).toBe("");
+        expect(definition.copyOf).toBeNull();
     });
 
 });

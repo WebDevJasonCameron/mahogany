@@ -50,7 +50,7 @@ name: Character
 state: library
 stateId: core
 categoryId: character
-copyOf: ""
+copyOf: null
 fields:
   - key: name
     label: Name
@@ -88,7 +88,7 @@ fields:
             state: ComponentState.Library,
             stateId: "core",
             categoryId: "character",
-            copyOf: "",
+            copyOf: null,
             fields: [
                 {
                     key: "name",
