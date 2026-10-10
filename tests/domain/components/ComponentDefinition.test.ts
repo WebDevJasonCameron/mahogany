@@ -395,5 +395,22 @@ describe("ComponentDefinition", () => {
             'Component Definition state ID "Ravenloft Saturday" is invalid.'
         );
     });
-    
+
+    test("rejects a malformed copyOf ID", () => {
+        const definition = createComponentDefinition(
+            "Character",
+            ComponentState.Library,
+            "core",
+            "character"
+        );
+
+        definition.copyOf = "not-a-valid-id";
+
+        const result = validateComponentDefinition(definition);
+
+        expect(result.valid).toBe(false);
+        expect(result.errors).toContain(
+            'Component Definition copyOf ID "not-a-valid-id" is invalid.'
+        );
+    });
 });

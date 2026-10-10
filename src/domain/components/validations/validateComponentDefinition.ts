@@ -41,6 +41,7 @@
 import { ComponentDefinition } from "@/domain/components/models/ComponentDefinition";
 import { validateFieldDefinition } from "@/domain/components/validations/validateFieldDefinition";
 import {ComponentDefinitionCategoryRegistry} from "@/domain/components/models/ComponentDefinitionCategoryRegistry";
+import {isValidId} from "@/domain/shared/identity/isValidId";
 
 export interface ValidationResult {
     valid: boolean;
@@ -64,6 +65,12 @@ export function validateComponentDefinition(definition: ComponentDefinition): Va
     } else if (!STATE_ID_PATTERN.test(definition.stateId)) {
         errors.push(
             `Component Definition state ID "${definition.stateId}" is invalid.`
+        );
+    }
+
+    if (definition.copyOf && !isValidId(definition.copyOf)) {
+        errors.push(
+            `Component Definition copyOf ID "${definition.copyOf}" is invalid.`
         );
     }
 
