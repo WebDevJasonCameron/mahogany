@@ -1,6 +1,6 @@
 # Phase 0 — Mahogany Field Model
 
-**Status:** Proposed for Scrum Master review  
+**Status:** Approved Phase 0 baseline  
 **Issue:** 0.1.6.2 — Define the Mahogany Field Model  
 **Depends on:** 0.1.6.1 — Phase 0 Markdown Contract  
 **Downstream:** 0.1.6.3–0.1.6.8
@@ -79,7 +79,7 @@ The following **eight** top-level structural Field types are approved:
 | `Paragraph` | Paragraph content | Retains relevant inline Markdown. |
 | `List` | Ordered, unordered, nested, and task/check lists | List items are subordinate structures; list semantics are detailed in 0.1.6.3. |
 | `Blockquote` | Quoted block content | May contain subordinate Markdown blocks; recursion is deferred. |
-| `CodeBlock` | Fenced and indented code blocks | Details may include fenced language information where present. |
+| `CodeBlock` | Fenced and indented code blocks | Downstream modeling must distinguish fenced from indented code and preserve the complete fenced information string (not only a language label). |
 | `ThematicBreak` | Horizontal/thematic rules | A structural separator. |
 | `Table` | GFM pipe tables | First-class structure; detailed table representation belongs to 0.1.6.4. |
 | `OpaqueBlock` | Source content recognized as unsafe or unsupported for structural interpretation | Preserves original content without falsely claiming semantic understanding. |
@@ -113,7 +113,7 @@ Name: Lothar
 
 The first two blocks remain `Paragraph` Fields, and the last block remains a `List` Field. Mahogany may additionally interpret certain content as a key and value. Each list item may independently carry such an interpretation; a list can mix key-value and ordinary items.
 
-The model must not automatically treat every colon or emphasized phrase as proof of a key-value relationship. Recognition, confirmation, validation, and the exact representation of optional interpretations are **not finalized in this issue**. Such interpretations must not replace or discard the original Markdown content.
+The model must not automatically treat every colon or emphasized phrase as proof of a key-value relationship. Recognition, confirmation, validation, and the exact representation of optional interpretations are **not finalized in this issue**. Optional content interpretations annotate or describe existing Field content; they do not replace its underlying Markdown structure or authored source. Such interpretations must not replace or discard the original Markdown content.
 
 Value-oriented notions such as `String`, `Text`, `Number`, and `Enum` are not structural Markdown Field types. Their future relationship to guided content entry belongs to FieldDefinition redesign in 0.1.6.7.
 
@@ -149,7 +149,7 @@ When Mahogany can identify content it cannot safely represent as a supported str
 
 An `OpaqueBlock` is **not** an authored fenced code block. It indicates preservation without a claim of structural understanding.
 
-Not every unfamiliar extension will be detectable as unknown: a standard parser may interpret some syntax as ordinary text or another supported structure. Parser detection and fallback rules belong to **0.1.6.5**. Unsupported content must not be silently discarded. If a future edit or serialization cannot preserve it safely, the operation should fail explicitly rather than risk data loss, under rules finalized in **0.1.6.6**.
+`OpaqueBlock` is a fallback representation, not a universal detector of unfamiliar Markdown extensions. Not every unfamiliar extension will be detectable as unknown: a standard parser may interpret some syntax as ordinary text or another supported structure. For example, `[[Lothar]]` may be parsed as ordinary Paragraph content; the absence of an `OpaqueBlock` is not proof that rewriting that Paragraph is safe. Parser detection and fallback rules belong to **0.1.6.5**. Unsupported content must not be silently discarded. If a future edit or serialization cannot preserve it safely, the operation should fail explicitly rather than risk data loss, under rules finalized in **0.1.6.6**.
 
 Raw HTML and HTML comments remain source content even when a renderer filters, suppresses, or sanitizes them. Rendering policy is distinct from source preservation.
 
@@ -191,4 +191,4 @@ Out of scope here: production parser/serializer code, exact TypeScript interface
 
 ## 12. Completion criteria
 
-This architecture document establishes the conceptual Field definition, eight-type vocabulary, core property responsibilities, document ordering, repetition and identity rules, optional interpretation policy, unsupported-content strategy, and downstream boundaries. It is ready for Scrum Master review. **Approval of this document does not authorize implementation beyond the scope of the corresponding roadmap issues.**
+This architecture document establishes the conceptual Field definition, eight-type vocabulary, core property responsibilities, document ordering, repetition and identity rules, optional interpretation policy, unsupported-content strategy, and downstream boundaries. It was approved in the Scrum Master architecture review, subject to the clarifications now incorporated. **Approval of this document does not authorize implementation beyond the scope of the corresponding roadmap issues.**
