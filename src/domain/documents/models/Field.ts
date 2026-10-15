@@ -16,6 +16,20 @@ export interface ParagraphField {
     data: string;
 }
 
+export interface ThematicBreakField {
+    structure: FieldType.ThematicBreak;
+    structureDetails: Record<string, never>;
+    data: null;
+}
+
+export interface OpaqueBlockField {
+    structure: FieldType.OpaqueBlock;
+    structureDetails: Record<string, never>;
+    data: string;
+}
+
 export type Field =
     | HeadingField
-    | ParagraphField;
+    | ParagraphField
+    | ThematicBreakField
+    | OpaqueBlockField;
