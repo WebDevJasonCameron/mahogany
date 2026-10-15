@@ -10,7 +10,7 @@ Mahogany is a local-first, Markdown-first application for managing reusable Comp
 | --- | --- | --- | --- |
 | [Phase 0 Markdown Contract](markdown/phase-0-markdown-contract.md) | Approved baseline; amend as requirements emerge | 0.1.6.1 | Defines which Markdown structures Phase 0 recognizes, what it preserves, and what is deferred. |
 | [Phase 0 Field Model](markdown/phase-0-field-model.md) | Approved Phase 0 baseline | 0.1.6.2 | Defines Mahogany’s canonical Field and Document models, including structural types, content representation, ordering, identity, and semantic interpretation. |
-| [Phase 0 Recursive and Container Semantics](markdown/phase-0-recursive-container-semantics.md) | Proposed — Scrum Master review | 0.1.6.3 | Defines heading-based sections, Field containment, recursive nesting, source ordering, and structural ownership boundaries. |
+| [Phase 0 Recursive and Container Semantics](markdown/phase-0-recursive-container-semantics.md) | Approved Phase 0 baseline | 0.1.6.3 | Defines heading-based sections, Field containment, recursive nesting, source ordering, and structural ownership boundaries. |
 
 ## Documentation conventions
 

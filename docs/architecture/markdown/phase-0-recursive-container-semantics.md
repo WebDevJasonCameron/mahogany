@@ -1,6 +1,6 @@
 # Phase 0 — Recursive and Container Field Semantics
 
-**Status:** Proposed — Scrum Master review  
+**Status:** Approved Phase 0 baseline  
 **Issue:** 0.1.6.3 — Define Recursive and Container Field Semantics  
 **Depends on:** 0.1.6.1 — Phase 0 Markdown Contract; 0.1.6.2 — Mahogany Field Model  
 **Downstream:** 0.1.6.4 — Table Field Semantics; 0.1.6.5 — Parser; 0.1.6.6 — Serialization and Round Trip
@@ -67,6 +67,8 @@ Document
 │           └── Paragraph
 └── Section: Another Character (#)
 ```
+
+Heading-derived Section scope is limited to its **enclosing Markdown block container**. A heading inside a Blockquote or ListItem cannot establish ownership over content outside that container. Section hierarchy is derived independently within each applicable container scope. For example, a heading inside a blockquote does not own a following paragraph outside the blockquote.
 
 A Section owns content for navigation, collapse/expand, display, and future editing. This does **not** turn `Lothar`, `Background`, or `Family` into a ComponentDefinition, unique property, class, or Component relationship.
 
@@ -150,6 +152,7 @@ Visual styling and indentation policies are independent of architectural recursi
 - Repeated headings, labels, list items, and values are valid and do not cause identity collisions.
 - Persistent Field UUIDs, ordering keys, and back-references to parents are **not required** for Phase 0.
 - The containment model is an **acyclic tree**: an occurrence cannot contain itself, an ancestor, or a shared occurrence with a second parent.
+- A derived Section view may reference Fields already represented in the Document's source sequence, but must not create duplicate Field occurrences or establish competing structural parents. The implementation must distinguish a **structural view** from ownership of underlying Field occurrences. There is only one canonical occurrence and one structural ownership relationship, regardless of how many views expose it.
 
 References to other content are different from structural ownership. Inline links, anchors, wikilinks, or future Component relationships may point to another document or section without moving that target into the referring Field's containment tree.
 
@@ -160,7 +163,7 @@ Unsupported content must coexist with recognized Fields inside the appropriate c
 - **Preservation:** Retain recognized unsupported source as faithfully as practical, using `OpaqueBlock` when appropriate. `OpaqueBlock` is a fallback representation, **not a universal detector** of unfamiliar Markdown extensions; an extension such as a wikilink may already have been parsed as ordinary paragraph text.
 - **Display:** Expose preserved content and indicate when Mahogany does not fully support its interpretation. Identical rendering to another application's extension is not guaranteed.
 - **External files:** Reading does not write. Mahogany may add HTML comment annotations to an existing externally authored file **only with explicit user authorization** to modify that original file.
-- **Mahogany-authored files:** When recognized unsupported content is introduced or retained through Mahogany's editing workflow, Mahogany writes appropriate HTML comment annotations on save.
+- **Mahogany-authored files:** Mahogany-authored documents **may use Mahogany-specific HTML comment annotations** to identify recognized unsupported content. The exact annotation format, placement rules, and circumstances requiring insertion will be established during parsing and serialization design (0.1.6.5–0.1.6.6). We intend to define circumstances in which safe annotation is **mandatory**, rather than making it optional merely for implementation convenience. No annotation may be inserted when doing so would alter intended document structure or cause source loss.
 - **Idempotence:** Mahogany must recognize its own annotations and avoid duplicating them on subsequent saves.
 - **No structural side effects:** An annotation is a source-level notice, not a new parent-child relationship, Component metadata field, or semantic Component link.
 
@@ -194,7 +197,7 @@ The parser and serializer designs must honor the following requirements:
 4. Preserve source order at every level and avoid converting repeated content into keyed maps.
 5. Keep structural ownership acyclic and single-parent; keep links/references separate.
 6. Preserve unsupported content in place when recognized and avoid unnecessary loss of surrounding supported structure.
-7. Respect no-implicit-writes for external files and the approved annotation authorization policy.
+7. Respect no-implicit-writes for external files and the approved annotation authorization policy; defer mandatory safe-insertion criteria to 0.1.6.5–0.1.6.6.
 8. Retain enough source fidelity for safe round-trip serialization; exact guarantees are specified in 0.1.6.6.
 9. Keep table internals available for first-class modeling under 0.1.6.4.
 
@@ -213,4 +216,4 @@ This issue does **not** implement a parser, serializer, renderer, collapsible UI
 - [ ] Structural containment is separated from semantic Component relationships.
 - [ ] Table internals, parsing, and serialization are reserved for their downstream issues.
 
-**Approval:** Pending Scrum Master review. Once approved, update this status to **Approved Phase 0 baseline** and align the architecture index.
+**Approval:** Scrum Master architecture approved subject to the three documentation clarifications incorporated here (October 15, 2026). **Approved Phase 0 baseline.**
