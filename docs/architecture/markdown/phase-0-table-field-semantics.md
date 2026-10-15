@@ -1,6 +1,6 @@
 # Phase 0 — First-Class Table Field Semantics
 
-**Status:** Proposed — Scrum Master review  
+**Status:** Approved Phase 0 baseline  
 **Issue:** 0.1.6.4 — Define First-Class Table Field Semantics  
 **Depends on:** 0.1.6.1 — Phase 0 Markdown Contract; 0.1.6.2 — Mahogany Field Model; 0.1.6.3 — Recursive and Container Field Semantics  
 **Downstream:** 0.1.6.5 — Markdown Parser; 0.1.6.6 — Serialization and Round Trip; 0.1.6.7–0.1.6.8 — FieldDefinition guidance
@@ -24,7 +24,7 @@ A Table Field conceptually consists of:
 1. An **ordered collection of column definitions**. Each column definition contains its **header cell content**, alignment, and position within the table.
 2. An **ordered collection of data rows**, each with an ordered collection of cells.
 
-The GFM header row is explicitly represented through column definitions rather than being treated as an ordinary data row whose role must be inferred. Header text is not a key, need not be unique, and does not identify a column persistently.
+The GFM header row is explicitly represented through column definitions rather than being treated as an ordinary data row whose role must be inferred. Header text is not a key, need not be unique, and does not identify a column persistently. **Within a parsed table, column definitions are distinguished by position even when their header content is blank or repeated.**
 
 Example:
 
@@ -69,6 +69,8 @@ GFM interprets rows relative to the number of header columns. A short row is pad
 | Row explicitly contains empty cells | Retain empty authored cells and their positions. |
 | Row contains excess cells | Retain the excess authored content even if GFM's interpreted table omits it. |
 | Table syntax cannot safely be interpreted | Preserve source without silently coercing or discarding content; fallback handling follows the existing `OpaqueBlock` and preservation policies where applicable. |
+
+GFM permits optional leading and trailing pipes. **A leading or trailing pipe is not, by itself, evidence of an additional empty cell.** Whether a cell was explicitly authored as empty or omitted must be determined from the actual row syntax relative to the defined columns; the parser and serializer will establish the exact mechanics in 0.1.6.5–0.1.6.6.
 
 The conceptual Table model must therefore accommodate both the **GFM-interpreted rectangular view** and enough **authored source information** to preserve irregularities. This does not prescribe a specific source-span, raw-row, or supplemental-cell implementation. Those mechanics belong to 0.1.6.5 and 0.1.6.6.
 
@@ -143,4 +145,4 @@ Mahogany's future search/index layer may distinguish table, header, column, row,
 - [x] No mandatory persistent row/column/cell IDs.
 - [x] Explicit parser/serializer requirements and downstream boundaries.
 
-**Review status:** Proposed. Checkboxes indicate that this draft addresses the issue's architectural topics; they do not constitute Scrum Master approval or implementation verification.
+**Review status:** Approved by Scrum Master (review of commit `a500dd1`, October 15, 2026). Minor documentation clarifications incorporated after approval. Acceptance checkboxes reflect architectural coverage, not parser or serializer implementation verification.
