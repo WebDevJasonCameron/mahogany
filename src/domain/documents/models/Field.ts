@@ -43,10 +43,56 @@ export interface BlockquoteField {
     data: Field[];
 }
 
+/**
+ * List Items
+ */
+export interface ListItem {
+    checked: boolean | null;
+    spread: boolean;
+    fields: Field[];
+}
+
+export interface ListField {
+    structure: FieldType.List;
+    structureDetails: {
+        ordered: boolean;
+        start: number | null;
+        spread: boolean;
+    };
+    data: ListItem[];
+}
+
+/**
+ * Tables
+ */
+export interface TableCell {
+    content: string;
+}
+
+export interface TableColumn {
+    header: TableCell;
+    alignment: "left" | "center" | "right" | "unspecified";
+}
+
+export interface TableRow {
+    cells: TableCell[];
+}
+
+export interface TableField {
+    structure: FieldType.Table;
+    structureDetails: Record<string, never>;
+    data: {
+        columns: TableColumn[];
+        rows: TableRow[];
+    };
+}
+
 export type Field =
     | HeadingField
     | ParagraphField
     | ThematicBreakField
     | OpaqueBlockField
     | CodeBlockField
-    | BlockquoteField;
+    | BlockquoteField
+    | ListField
+    | TableField;
