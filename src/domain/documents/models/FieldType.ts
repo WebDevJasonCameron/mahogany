@@ -1,4 +1,4 @@
-export enum FieldType{
+export enum FieldType {
     Heading = "heading",
     Paragraph = "paragraph",
     List = "list",

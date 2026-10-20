@@ -28,8 +28,25 @@ export interface OpaqueBlockField {
     data: string;
 }
 
+export interface CodeBlockField {
+    structure: FieldType.CodeBlock;
+    structureDetails: {
+        style: "fenced" | "indented";
+        info: string | null;
+    };
+    data: string;
+}
+
+export interface BlockquoteField {
+    structure: FieldType.Blockquote;
+    structureDetails: Record<string, never>;
+    data: Field[];
+}
+
 export type Field =
     | HeadingField
     | ParagraphField
     | ThematicBreakField
-    | OpaqueBlockField;
+    | OpaqueBlockField
+    | CodeBlockField
+    | BlockquoteField;
