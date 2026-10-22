@@ -44,6 +44,10 @@
     "electron-squirrel-startup": "^1.0.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
     "yaml": "^2.9.0",
     "zod": "^4.6.4"
   }
