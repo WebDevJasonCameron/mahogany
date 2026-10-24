@@ -129,5 +129,183 @@ describe("MahoganyMarkdownParser", () => {
 
         expect(fields[2]?.data).toBe("- Sword\n- Shield");
     });
+
+    it("parses a fenced code block with a language", () => {
+        const markdown = [
+            "```typescript",
+            'const name = "Lothar";',
+            "```",
+        ].join("\n");
+
+        expect(parseMarkdownFields(markdown)).toEqual([
+            {
+                structure: FieldType.CodeBlock,
+                structureDetails: {
+                    style: "fenced",
+                    info: "typescript",
+                },
+                data: 'const name = "Lothar";',
+            },
+        ]);
+    });
+
+    it("parses a fenced code block without a language", () => {
+        const markdown = [
+            "~~~",
+            "A mysterious inscription.",
+            "~~~",
+        ].join("\n");
+
+        expect(parseMarkdownFields(markdown)).toEqual([
+            {
+                structure: FieldType.CodeBlock,
+                structureDetails: {
+                    style: "fenced",
+                    info: null,
+                },
+                data: "A mysterious inscription.",
+            },
+        ]);
+    });
+
+    it("parses an indented code block", () => {
+        const markdown = [
+            '    const name = "Lothar";',
+            '    const level = 5;',
+        ].join("\n");
+
+        expect(parseMarkdownFields(markdown)).toEqual([
+            {
+                structure: FieldType.CodeBlock,
+                structureDetails: {
+                    style: "indented",
+                    info: null,
+                },
+                data: [
+                    'const name = "Lothar";',
+                    "const level = 5;",
+                ].join("\n"),
+            },
+        ]);
+    });
+
+    it("preserves ordering around code blocks", () => {
+        const markdown = [
+            "# Lothar",
+            "",
+            "An example spell:",
+            "",
+            "```",
+            "castFireball();",
+            "```",
+            "",
+            "The spell succeeds.",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields.map((field) => field.structure)).toEqual([
+            FieldType.Heading,
+            FieldType.Paragraph,
+            FieldType.CodeBlock,
+            FieldType.Paragraph,
+        ]);
+    });
+
+    it("parses a blockquote containing a paragraph", () => {
+        const markdown = "> Lothar approaches the gate.";
+
+        expect(parseMarkdownFields(markdown)).toEqual([
+            {
+                structure: FieldType.Blockquote,
+                structureDetails: {},
+                data: [
+                    {
+                        structure: FieldType.Paragraph,
+                        structureDetails: {},
+                        data: "Lothar approaches the gate.",
+                    },
+                ],
+            },
+        ]);
+    });
+
+    it("parses nested blockquotes recursively", () => {
+        const markdown = [
+            "> Lothar approaches.",
+            ">",
+            "> > The guard whispers.",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toHaveLength(1);
+        expect(fields[0]?.structure).toBe(FieldType.Blockquote);
+
+        if (fields[0]?.structure !== FieldType.Blockquote) {
+            throw new Error("Expected a Blockquote Field.");
+        }
+
+        expect(fields[0].data.map((field) => field.structure)).toEqual([
+            FieldType.Paragraph,
+            FieldType.Blockquote,
+        ]);
+
+        const nested = fields[0].data[1];
+
+        expect(nested?.structure).toBe(FieldType.Blockquote);
+
+        if (nested?.structure === FieldType.Blockquote) {
+            expect(nested.data).toEqual([
+                {
+                    structure: FieldType.Paragraph,
+                    structureDetails: {},
+                    data: "The guard whispers.",
+                },
+            ]);
+        }
+    });
+
+    it("preserves field order around a blockquote", () => {
+        const markdown = [
+            "Before the warning.",
+            "",
+            "> Beware the dragon.",
+            "",
+            "After the warning.",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields.map((field) => field.structure)).toEqual([
+            FieldType.Paragraph,
+            FieldType.Blockquote,
+            FieldType.Paragraph,
+        ]);
+    });
+
+    it("excludes blockquote markers from multiline paragraph content", () => {
+        const markdown = [
+            "> Lothar approaches the gate.",
+            "> The guard raises his spear.",
+        ].join("\n");
+
+        expect(parseMarkdownFields(markdown)).toEqual([
+            {
+                structure: FieldType.Blockquote,
+                structureDetails: {},
+                data: [
+                    {
+                        structure: FieldType.Paragraph,
+                        structureDetails: {},
+                        data: [
+                            "Lothar approaches the gate.",
+                            "The guard raises his spear.",
+                        ].join("\n"),
+                    },
+                ],
+            },
+        ]);
+    });
     
 });

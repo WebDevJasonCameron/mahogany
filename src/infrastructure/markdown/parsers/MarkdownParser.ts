@@ -2,6 +2,7 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkFrontmatter from "remark-frontmatter";
+import type { RootContent } from "mdast";
 
 import { FieldType } from "@/domain/documents/models/FieldType";
 import type { Field } from "@/domain/documents/models/Field";
@@ -15,7 +16,16 @@ export function parseMarkdownFields(markdown: string): Field[] {
     const tree = markdownProcessor.parse(markdown);
     const fields: Field[] = [];
 
-    for (const node of tree.children) {
+    return parseNodes(tree.children, markdown);
+}
+
+function parseNodes(
+    nodes: readonly RootContent[],
+    markdown: string,
+): Field[] {
+    const fields: Field[] = [];
+
+    for (const node of nodes) {
         switch (node.type) {
             case "heading": {
                 const firstChild = node.children[0];
@@ -41,22 +51,69 @@ export function parseMarkdownFields(markdown: string): Field[] {
                 break;
             }
 
-            case "paragraph":
+            case "paragraph": {
+                const firstChild = node.children[0];
+                const lastChild = node.children[node.children.length - 1];
+
+                const start = firstChild?.position?.start.offset;
+                const end = lastChild?.position?.end.offset;
+
+                if (start === undefined || end === undefined) {
+                    throw new Error(
+                        "Unable to determine paragraph content boundaries."
+                    );
+                }
+
                 fields.push({
                     structure: FieldType.Paragraph,
                     structureDetails: {},
-                    data: markdown.slice(
-                        node.position!.start.offset!,
-                        node.position!.end.offset!,
-                    ),
+                    data: extractParagraphContent(markdown, start, end),
                 });
+
                 break;
+            }
 
             case "thematicBreak": {
                 fields.push({
                     structure: FieldType.ThematicBreak,
                     structureDetails: {},
                     data: null,
+                });
+
+                break;
+            }
+
+            case "code": {
+                const sourceStart = node.position?.start.offset;
+                const sourceEnd = node.position?.end.offset;
+
+                if (sourceStart === undefined || sourceEnd === undefined) {
+                    throw new Error(
+                        "Unable to determine code block source boundaries."
+                    );
+                }
+
+                const source = markdown.slice(sourceStart, sourceEnd);
+
+                const isFenced = /^(?: {0,3})(?:`{3,}|~{3,})/.test(source);
+
+                fields.push({
+                    structure: FieldType.CodeBlock,
+                    structureDetails: {
+                        style: isFenced ? "fenced" : "indented",
+                        info: node.lang ?? null,
+                    },
+                    data: node.value,
+                });
+
+                break;
+            }
+
+            case "blockquote": {
+                fields.push({
+                    structure: FieldType.Blockquote,
+                    structureDetails: {},
+                    data: parseNodes(node.children, markdown),
                 });
 
                 break;
@@ -82,6 +139,24 @@ export function parseMarkdownFields(markdown: string): Field[] {
             }
         }
     }
-
     return fields;
+}
+
+function extractParagraphContent(
+    markdown: string,
+    start: number,
+    end: number,
+): string {
+    const source = markdown.slice(start, end);
+
+    return source
+        .split(/\r?\n/)
+        .map((line, index) => {
+            if (index === 0) {
+                return line;
+            }
+
+            return line.replace(/^\s*>\s?/, "");
+        })
+        .join("\n");
 }
