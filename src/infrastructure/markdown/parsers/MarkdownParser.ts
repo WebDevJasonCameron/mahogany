@@ -2,7 +2,7 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkFrontmatter from "remark-frontmatter";
-import type { RootContent } from "mdast";
+import type { RootContent, Blockquote } from "mdast";
 
 import { FieldType } from "@/domain/documents/models/FieldType";
 import type { Field } from "@/domain/documents/models/Field";
@@ -14,7 +14,6 @@ const markdownProcessor = unified()
 
 export function parseMarkdownFields(markdown: string): Field[] {
     const tree = markdownProcessor.parse(markdown);
-    const fields: Field[] = [];
 
     return parseNodes(tree.children, markdown);
 }
@@ -22,6 +21,7 @@ export function parseMarkdownFields(markdown: string): Field[] {
 function parseNodes(
     nodes: readonly RootContent[],
     markdown: string,
+    blockquotes: readonly Blockquote[] = [],
 ): Field[] {
     const fields: Field[] = [];
 
@@ -67,7 +67,12 @@ function parseNodes(
                 fields.push({
                     structure: FieldType.Paragraph,
                     structureDetails: {},
-                    data: extractParagraphContent(markdown, start, end),
+                    data: extractParagraphContent(
+                        markdown,
+                        start,
+                        end,
+                        blockquotes.length,
+                    ),               
                 });
 
                 break;
@@ -113,7 +118,11 @@ function parseNodes(
                 fields.push({
                     structure: FieldType.Blockquote,
                     structureDetails: {},
-                    data: parseNodes(node.children, markdown),
+                    data: parseNodes(
+                        node.children,
+                        markdown,
+                        [...blockquotes, node],
+                    ),
                 });
 
                 break;
@@ -146,17 +155,34 @@ function extractParagraphContent(
     markdown: string,
     start: number,
     end: number,
+    blockquoteDepth: number,
 ): string {
     const source = markdown.slice(start, end);
 
+    if (blockquoteDepth === 0) {
+        return source;
+    }
+
     return source
-        .split(/\r?\n/)
+        .split(/\r\n|\n|\r/)
         .map((line, index) => {
             if (index === 0) {
                 return line;
             }
 
-            return line.replace(/^\s*>\s?/, "");
+            let content = line;
+
+            for (let depth = 0; depth < blockquoteDepth; depth++) {
+                const match = content.match(/^ {0,3}> ?/);
+
+                if (!match) {
+                    break;
+                }
+
+                content = content.slice(match[0].length);
+            }
+
+            return content;
         })
         .join("\n");
 }

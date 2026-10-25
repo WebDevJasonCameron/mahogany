@@ -307,5 +307,119 @@ describe("MahoganyMarkdownParser", () => {
             },
         ]);
     });
+
+    it("extracts multiline paragraphs from nested blockquotes", () => {
+        const markdown = [
+            "> > Lothar enters the chamber.",
+            "> > The dragon awakens.",
+        ].join("\n");
+
+        expect(parseMarkdownFields(markdown)).toEqual([
+            {
+                structure: FieldType.Blockquote,
+                structureDetails: {},
+                data: [
+                    {
+                        structure: FieldType.Blockquote,
+                        structureDetails: {},
+                        data: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: [
+                                    "Lothar enters the chamber.",
+                                    "The dragon awakens.",
+                                ].join("\n"),
+                            },
+                        ],
+                    },
+                ],
+            },
+        ]);
+    });
+
+    it("preserves lazy continuation lines in blockquotes", () => {
+        const markdown = [
+            "> Lothar approaches the gate.",
+            "The guard raises his spear.",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.Blockquote,
+                structureDetails: {},
+                data: [
+                    {
+                        structure: FieldType.Paragraph,
+                        structureDetails: {},
+                        data: [
+                            "Lothar approaches the gate.",
+                            "The guard raises his spear.",
+                        ].join("\n"),
+                    },
+                ],
+            },
+        ]);
+    });
+
+    it("preserves literal greater-than characters in paragraph content", () => {
+        const markdown = [
+            "> Lothar's strength is > 18.",
+            "> His defense is > 15.",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.Blockquote,
+                structureDetails: {},
+                data: [
+                    {
+                        structure: FieldType.Paragraph,
+                        structureDetails: {},
+                        data: [
+                            "Lothar's strength is > 18.",
+                            "His defense is > 15.",
+                        ].join("\n"),
+                    },
+                ],
+            },
+        ]);
+    });
+
+    it("preserves authored inline syntax inside nested blockquotes", () => {
+        const markdown = [
+            "> > Lothar is __strong__.",
+            "> > His strength is > 18.",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.Blockquote,
+                structureDetails: {},
+                data: [
+                    {
+                        structure: FieldType.Blockquote,
+                        structureDetails: {},
+                        data: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: [
+                                    "Lothar is __strong__.",
+                                    "His strength is > 18.",
+                                ].join("\n"),
+                            },
+                        ],
+                    },
+                ],
+            },
+        ]);
+    });
     
 });
