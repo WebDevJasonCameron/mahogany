@@ -2,7 +2,7 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkFrontmatter from "remark-frontmatter";
-import type { RootContent, Blockquote } from "mdast";
+import type { RootContent, PhrasingContent, Blockquote } from "mdast";
 
 import { FieldType } from "@/domain/documents/models/FieldType";
 import type { Field } from "@/domain/documents/models/Field";
@@ -21,7 +21,6 @@ export function parseMarkdownFields(markdown: string): Field[] {
 function parseNodes(
     nodes: readonly RootContent[],
     markdown: string,
-    blockquotes: readonly Blockquote[] = [],
 ): Field[] {
     const fields: Field[] = [];
 
@@ -52,27 +51,10 @@ function parseNodes(
             }
 
             case "paragraph": {
-                const firstChild = node.children[0];
-                const lastChild = node.children[node.children.length - 1];
-
-                const start = firstChild?.position?.start.offset;
-                const end = lastChild?.position?.end.offset;
-
-                if (start === undefined || end === undefined) {
-                    throw new Error(
-                        "Unable to determine paragraph content boundaries."
-                    );
-                }
-
                 fields.push({
                     structure: FieldType.Paragraph,
                     structureDetails: {},
-                    data: extractParagraphContent(
-                        markdown,
-                        start,
-                        end,
-                        blockquotes.length,
-                    ),               
+                    data: extractInlineContent(node.children, markdown),
                 });
 
                 break;
@@ -118,11 +100,7 @@ function parseNodes(
                 fields.push({
                     structure: FieldType.Blockquote,
                     structureDetails: {},
-                    data: parseNodes(
-                        node.children,
-                        markdown,
-                        [...blockquotes, node],
-                    ),
+                    data: parseNodes(node.children, markdown),
                 });
 
                 break;
@@ -170,6 +148,8 @@ function extractParagraphContent(
                 return line;
             }
 
+            
+            
             let content = line;
 
             for (let depth = 0; depth < blockquoteDepth; depth++) {
@@ -185,4 +165,72 @@ function extractParagraphContent(
             return content;
         })
         .join("\n");
+}
+
+function extractInlineContent(
+    nodes: readonly PhrasingContent[],
+    markdown: string,
+): string {
+    return nodes
+        .map((node) => {
+            switch (node.type) {
+                case "text": {
+                    const start = node.position?.start.offset;
+                    const end = node.position?.end.offset;
+
+                    if (start === undefined || end === undefined) {
+                        throw new Error(
+                            "Unable to determine text node source boundaries."
+                        );
+                    }
+
+                    const source = markdown.slice(start, end);
+
+                    // Preserve authored text when its source is contiguous.
+                    // Multiline text inside containers requires additional handling.
+                    if (!/[\r\n]/.test(source)) {
+                        return source;
+                    }
+
+                    return node.value;
+                }
+
+                case "break": {
+                    const start = node.position?.start.offset;
+                    const end = node.position?.end.offset;
+
+                    if (start === undefined || end === undefined) {
+                        throw new Error(
+                            "Unable to determine hard line break source boundaries."
+                        );
+                    }
+
+                    return markdown.slice(start, end);
+                }
+
+                case "emphasis":
+                case "strong":
+                case "delete":
+                case "inlineCode":
+                case "link":
+                case "image": {
+                    const start = node.position?.start.offset;
+                    const end = node.position?.end.offset;
+
+                    if (start === undefined || end === undefined) {
+                        throw new Error(
+                            `Unable to preserve inline Markdown node: ${node.type}`
+                        );
+                    }
+
+                    return markdown.slice(start, end);
+                }
+
+                default:
+                    throw new Error(
+                        `Unsupported inline Markdown node: ${node.type}`
+                    );
+            }
+        })
+        .join("");
 }

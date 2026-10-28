@@ -421,5 +421,70 @@ describe("MahoganyMarkdownParser", () => {
             },
         ]);
     });
+
+    it("preserves multiline emphasis without blockquote markers", () => {
+        const markdown = [
+            "> Lothar is **very",
+            "> strong** indeed.",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.Blockquote,
+                structureDetails: {},
+                data: [
+                    {
+                        structure: FieldType.Paragraph,
+                        structureDetails: {},
+                        data: "Lothar is **very\nstrong** indeed.",
+                    },
+                ],
+            },
+        ]);
+    });
+
+    it("preserves escaped Markdown characters", () => {
+        const markdown = String.raw`\*Lothar\* is not emphasized.`;
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.Paragraph,
+                structureDetails: {},
+                data: String.raw`\*Lothar\* is not emphasized.`,
+            },
+        ]);
+    });
+
+    it("preserves hard line break syntax", () => {
+        const markdown = "First line  \nSecond line";
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.Paragraph,
+                structureDetails: {},
+                data: "First line  \nSecond line",
+            },
+        ]);
+    });
+
+    it("preserves backslash hard line break syntax", () => {
+        const markdown = "First line\\\nSecond line";
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.Paragraph,
+                structureDetails: {},
+                data: markdown,
+            },
+        ]);
+    });
     
 });
