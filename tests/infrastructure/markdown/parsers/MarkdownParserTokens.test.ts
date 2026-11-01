@@ -12,8 +12,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { preprocess } from "micromark-util-preprocess";
-import { parse } from "micromark-util-parse";
+import { parse, preprocess } from "micromark";
 
 describe("Markdown token investigation", () => {
     it("inspects multiline blockquote token events", () => {

@@ -6,6 +6,12 @@ import type { RootContent, PhrasingContent, Blockquote } from "mdast";
 
 import { FieldType } from "@/domain/documents/models/FieldType";
 import type { Field } from "@/domain/documents/models/Field";
+import { collectBlockquotePrefixRanges } from
+        "@/infrastructure/markdown/utils/collectBlockquotePrefixRanges";
+import { extractAuthoredContent } from
+        "@/infrastructure/markdown/utils/extractAuthoredContent";
+import type { SourceRange } from
+        "@/infrastructure/markdown/utils/extractAuthoredContent";
 
 const markdownProcessor = unified()
     .use(remarkParse)
@@ -15,12 +21,16 @@ const markdownProcessor = unified()
 export function parseMarkdownFields(markdown: string): Field[] {
     const tree = markdownProcessor.parse(markdown);
 
-    return parseNodes(tree.children, markdown);
+    const structuralRanges =
+        collectBlockquotePrefixRanges(markdown);
+
+    return parseNodes(tree.children, markdown, structuralRanges);
 }
 
 function parseNodes(
-    nodes: readonly RootContent[],
+    nodes: RootContent[],
     markdown: string,
+    structuralRanges: readonly SourceRange[],
 ): Field[] {
     const fields: Field[] = [];
 
@@ -44,7 +54,12 @@ function parseNodes(
                     structureDetails: {
                         level: node.depth,
                     },
-                    data: markdown.slice(start, end),
+                    data: extractAuthoredContent(
+                        markdown,
+                        start,
+                        end,
+                        structuralRanges
+                    )
                 });
 
                 break;
@@ -54,7 +69,11 @@ function parseNodes(
                 fields.push({
                     structure: FieldType.Paragraph,
                     structureDetails: {},
-                    data: extractInlineContent(node.children, markdown),
+                    data: extractInlineContent(
+                        node.children,
+                        markdown,
+                        structuralRanges
+                    ),
                 });
 
                 break;
@@ -96,15 +115,17 @@ function parseNodes(
                 break;
             }
 
-            case "blockquote": {
+            case "blockquote":
                 fields.push({
                     structure: FieldType.Blockquote,
                     structureDetails: {},
-                    data: parseNodes(node.children, markdown),
+                    data: parseNodes(
+                        node.children,
+                        markdown,
+                        structuralRanges
+                    ),
                 });
-
                 break;
-            }
 
             default: {
                 const start = node.position?.start.offset;
@@ -119,7 +140,12 @@ function parseNodes(
                 fields.push({
                     structure: FieldType.OpaqueBlock,
                     structureDetails: {},
-                    data: markdown.slice(start, end),
+                    data: extractAuthoredContent(
+                        markdown,
+                        start,
+                        end,
+                        structuralRanges
+                    )
                 });
 
                 break;
@@ -129,47 +155,10 @@ function parseNodes(
     return fields;
 }
 
-function extractParagraphContent(
-    markdown: string,
-    start: number,
-    end: number,
-    blockquoteDepth: number,
-): string {
-    const source = markdown.slice(start, end);
-
-    if (blockquoteDepth === 0) {
-        return source;
-    }
-
-    return source
-        .split(/\r\n|\n|\r/)
-        .map((line, index) => {
-            if (index === 0) {
-                return line;
-            }
-
-            
-            
-            let content = line;
-
-            for (let depth = 0; depth < blockquoteDepth; depth++) {
-                const match = content.match(/^ {0,3}> ?/);
-
-                if (!match) {
-                    break;
-                }
-
-                content = content.slice(match[0].length);
-            }
-
-            return content;
-        })
-        .join("\n");
-}
-
 function extractInlineContent(
     nodes: readonly PhrasingContent[],
     markdown: string,
+    structuralRanges: readonly SourceRange[],
 ): string {
     return nodes
         .map((node) => {
@@ -184,7 +173,12 @@ function extractInlineContent(
                         );
                     }
 
-                    const source = markdown.slice(start, end);
+                    const source = extractAuthoredContent(
+                        markdown,
+                        start,
+                        end,
+                        structuralRanges
+                    )
 
                     // Preserve authored text when its source is contiguous.
                     // Multiline text inside containers requires additional handling.
@@ -205,7 +199,12 @@ function extractInlineContent(
                         );
                     }
 
-                    return markdown.slice(start, end);
+                    return extractAuthoredContent(
+                        markdown,
+                        start,
+                        end,
+                        structuralRanges
+                    )
                 }
 
                 case "emphasis":
@@ -223,7 +222,12 @@ function extractInlineContent(
                         );
                     }
 
-                    return markdown.slice(start, end);
+                    return extractAuthoredContent(
+                        markdown,
+                        start,
+                        end,
+                        structuralRanges
+                    )
                 }
 
                 default:
