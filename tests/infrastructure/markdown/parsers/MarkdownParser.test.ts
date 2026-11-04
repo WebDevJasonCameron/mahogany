@@ -486,5 +486,61 @@ describe("MahoganyMarkdownParser", () => {
             },
         ]);
     });
+
+    it("parses a simple unordered list into ordered ListItems", () => {
+        const markdown = [
+            "- Sword",
+            "- Shield",
+            "- Torch",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.List,
+                structureDetails: {
+                    ordered: false,
+                    start: null,
+                    spread: false,
+                },
+                data: [
+                    {
+                        checked: null,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Sword",
+                            },
+                        ],
+                    },
+                    {
+                        checked: null,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Shield",
+                            },
+                        ],
+                    },
+                    {
+                        checked: null,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Torch",
+                            },
+                        ],
+                    },
+                ],
+            },
+        ]);
+    });
     
 });
