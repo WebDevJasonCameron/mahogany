@@ -88,11 +88,11 @@ describe("MahoganyMarkdownParser", () => {
         ]);
     });
 
-    it("preserves unsupported Markdown structures as OpaqueBlocks", () => {
+    it("preserves unsupported HTML blocks as OpaqueBlocks", () => {
         const markdown = [
-            "- Sword",
-            "- Shield",
-            "- Armor",
+            "<div>",
+            "Content",
+            "</div>",
         ].join("\n");
 
         const fields = parseMarkdownFields(markdown);
@@ -123,11 +123,35 @@ describe("MahoganyMarkdownParser", () => {
         expect(fields.map((field) => field.structure)).toEqual([
             FieldType.Heading,
             FieldType.Paragraph,
-            FieldType.OpaqueBlock,
+            FieldType.List,
             FieldType.Paragraph,
         ]);
 
-        expect(fields[2]?.data).toBe("- Sword\n- Shield");
+        const list = fields[2];
+
+        expect(list?.structure).toBe(FieldType.List);
+
+        if (list?.structure !== FieldType.List) {
+            throw new Error("Expected a List Field.");
+        }
+
+        expect(list.data).toHaveLength(2);
+
+        expect(list.data[0]?.fields).toEqual([
+            {
+                structure: FieldType.Paragraph,
+                structureDetails: {},
+                data: "Sword",
+            },
+        ]);
+
+        expect(list.data[1]?.fields).toEqual([
+            {
+                structure: FieldType.Paragraph,
+                structureDetails: {},
+                data: "Shield",
+            },
+        ]);
     });
 
     it("parses a fenced code block with a language", () => {

@@ -127,6 +127,29 @@ function parseNodes(
                 });
                 break;
 
+            case "list": {
+                fields.push({
+                    structure: FieldType.List,
+                    structureDetails: {
+                        ordered: node.ordered ?? false,
+                        start: node.ordered ? (node.start ?? 1) : null,
+                        spread: node.spread ?? false,
+                    },
+                    data: node.children.map((item) => ({
+                        checked: item.checked ?? null,
+                        spread: item.spread ?? false,
+                        fields: parseNodes(
+                            item.children,
+                            markdown,
+                            structuralRanges
+                        ),
+                    })),
+                });
+
+                break;
+            }
+                
+                
             default: {
                 const start = node.position?.start.offset;
                 const end = node.position?.end.offset;
