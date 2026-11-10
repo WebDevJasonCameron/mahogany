@@ -566,5 +566,117 @@ describe("MahoganyMarkdownParser", () => {
             },
         ]);
     });
+
+    it("parses an ordered list with a custom start number", () => {
+        const markdown = [
+            "3. Sword",
+            "4. Shield",
+            "5. Torch",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.List,
+                structureDetails: {
+                    ordered: true,
+                    start: 3,
+                    spread: false,
+                },
+                data: [
+                    {
+                        checked: null,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Sword",
+                            },
+                        ],
+                    },
+                    {
+                        checked: null,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Shield",
+                            },
+                        ],
+                    },
+                    {
+                        checked: null,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Torch",
+                            },
+                        ],
+                    },
+                ],
+            },
+        ]);
+    });
+
+    it("parses GFM task lists with checked and unchecked items", () => {
+        const markdown = [
+            "- [x] Create Lothar",
+            "- [ ] Assign equipment",
+            "- [x] Write backstory",
+        ].join("\n");
+
+        const fields = parseMarkdownFields(markdown);
+
+        expect(fields).toEqual([
+            {
+                structure: FieldType.List,
+                structureDetails: {
+                    ordered: false,
+                    start: null,
+                    spread: false,
+                },
+                data: [
+                    {
+                        checked: true,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Create Lothar",
+                            },
+                        ],
+                    },
+                    {
+                        checked: false,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Assign equipment",
+                            },
+                        ],
+                    },
+                    {
+                        checked: true,
+                        spread: false,
+                        fields: [
+                            {
+                                structure: FieldType.Paragraph,
+                                structureDetails: {},
+                                data: "Write backstory",
+                            },
+                        ],
+                    },
+                ],
+            },
+        ]);
+    });
     
 });
